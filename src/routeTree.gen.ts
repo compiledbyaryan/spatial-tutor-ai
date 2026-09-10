@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ExploreSceneIdRouteImport } from './routes/explore.$sceneId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExploreSceneIdRoute = ExploreSceneIdRouteImport.update({
   id: '/explore/$sceneId',
   path: '/explore/$sceneId',
@@ -32,30 +38,34 @@ const ExploreSceneIdRoute = ExploreSceneIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/explore/$sceneId': typeof ExploreSceneIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/explore/$sceneId': typeof ExploreSceneIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
   '/explore/$sceneId': typeof ExploreSceneIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/explore/$sceneId'
+  fullPaths: '/' | '/about' | '/auth' | '/explore/$sceneId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/explore/$sceneId'
-  id: '__root__' | '/' | '/about' | '/explore/$sceneId'
+  to: '/' | '/about' | '/auth' | '/explore/$sceneId'
+  id: '__root__' | '/' | '/about' | '/auth' | '/explore/$sceneId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
   ExploreSceneIdRoute: typeof ExploreSceneIdRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/explore/$sceneId': {
       id: '/explore/$sceneId'
       path: '/explore/$sceneId'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
   ExploreSceneIdRoute: ExploreSceneIdRoute,
 }
 export const routeTree = rootRouteImport
