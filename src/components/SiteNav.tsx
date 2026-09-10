@@ -1,15 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { Boxes, LineChart, LogOut, Music4, LayoutDashboard, Layers3 } from "lucide-react";
+import { Boxes, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 
 const links = [
   { to: "/explore/$sceneId", params: { sceneId: "cardiac" }, label: "3D Studio", icon: Boxes },
-  { to: "/graphs", label: "Graphs", icon: LineChart },
-  { to: "/focus", label: "Focus", icon: Music4 },
-  { to: "/flashcards", label: "Flashcards", icon: Layers3 },
-  { to: "/dashboard", label: "Tracker", icon: LayoutDashboard },
 ] as const;
 
 export function SiteNav() {
@@ -39,9 +35,7 @@ export function SiteNav() {
           {links.map((l) => (
             <Link
               key={l.label}
-              // @ts-expect-error — union of static and param routes
               to={l.to}
-              // @ts-expect-error — params only exist on the studio link
               params={l.params}
               className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground"
             >

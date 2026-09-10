@@ -56,11 +56,15 @@ export function StudioView({ scene }: { scene: SceneModule }) {
   const sceneChallenges = useMemo(() => challengesForScene(scene.id), [scene.id]);
 
   // Heart flagship demo hook: the canonical judge question stages a compare view.
+  // The local staging and the validated server actions converge on the same
+  // visual state; whichever lands first wins, the second is idempotent.
   const stageCompareDemo = useCallback(() => {
     controller.dispatch([
-      { type: "focus", hotspotId: "left-ventricle" },
       { type: "fadeOthers", hotspotIds: ["left-ventricle", "right-ventricle"] },
+      { type: "focus", hotspotId: "left-ventricle" },
     ]);
+    // Selecting the structure keeps the tutor grounded on the same target.
+    setActiveId("left-ventricle");
   }, [controller]);
 
   const onSelect = useCallback(
@@ -178,46 +182,62 @@ export function StudioView({ scene }: { scene: SceneModule }) {
               ["challenge", "Challenge"],
               ["mastery", "Master"],
             ] as [Mode, string][]
-          ).map(([m, label]) => (
-            <button
-              key={m}
-              onClick={() => {
-                if (m === "challenge" && sceneChallenges[0]) startChallenge(sceneChallenges[0]);
-                else if (m === "explore") exitChallenge();
-                else setMode(m);
-              }}
-              aria-current={mode === m ? "page" : undefined}
-              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                mode === m
-                  ? "bg-primary/15 text-primary ring-1 ring-primary/40"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {label}
-            </button>
+          ).map(([m, label], index) => (
+            <span key={m} className="flex items-center gap-1">
+              {index > 0 ? (
+                <span aria-hidden className="text-[10px] text-muted-foreground/50">
+                  →
+                </span>
+              ) : null}
+              <button
+                onClick={() => {
+                  if (m === "challenge" && sceneChallenges[0]) startChallenge(sceneChallenges[0]);
+                  else if (m === "explore") exitChallenge();
+                  else setMode(m);
+                }}
+                aria-current={mode === m ? "page" : undefined}
+                title={
+                  m === "explore"
+                    ? "Explore the 3D model and ask the tutor"
+                    : m === "challenge"
+                      ? "Test yourself by selecting structures in 3D"
+                      : "Review your mastery and weakest area"
+                }
+                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                  mode === m
+                    ? "bg-primary/15 text-primary ring-1 ring-primary/40"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {label}
+              </button>
+            </span>
           ))}
         </nav>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setDrawer((d) => !d)}
             aria-expanded={drawer}
-            className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs transition-colors lg:hidden ${
+            aria-label={drawer ? "Close structures panel" : "Open structures and challenges panel"}
+            className={`inline-flex min-h-[36px] min-w-[36px] items-center justify-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs transition-colors lg:hidden ${
               drawer
                 ? "border-primary/70 bg-primary/15 text-primary"
                 : "border-border text-muted-foreground hover:text-foreground"
             }`}
           >
-            <Layers className="h-3.5 w-3.5" /> Structures
+            <Layers className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Structures</span>
           </button>
           <button
             onClick={() => setAutoRotate((v) => !v)}
-            className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs transition-colors ${
+            aria-pressed={autoRotate}
+            title="Slowly orbit the camera"
+            className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs transition-colors ${
               autoRotate
                 ? "border-primary/70 bg-primary/15 text-primary"
                 : "border-border text-muted-foreground hover:text-foreground"
             }`}
           >
-            <Orbit className="h-3.5 w-3.5" /> Orbit
+            <Orbit className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Orbit</span>
           </button>
           <button
             onClick={() => {
@@ -225,9 +245,10 @@ export function StudioView({ scene }: { scene: SceneModule }) {
               setActiveId(null);
               controller.dispatch({ type: "resetScene" });
             }}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            title="Restore the default camera and visibility"
+            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
           >
-            <RotateCcw className="h-3.5 w-3.5" /> Reset view
+            <RotateCcw className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Reset view</span>
           </button>
         </div>
       </header>
@@ -273,44 +294,48 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             <p className="label-mono">{scene.accentLabel} module</p>
             <p className="mt-1 text-xs text-muted-foreground">{scene.tagline}</p>
           </div>
-          {mode === "challenge" && challenge ? (
+           {mode === "challenge" && challenge ? (
             <ChallengeBar
               challenge={challenge}
               selection={challengeSelection}
               onConsumeSelection={() => setChallengeSelection(null)}
               onEmphasize={(ids) => controller.dispatch({ type: "highlight", hotspotIds: ids })}
               onReveal={(ids) => controller.dispatch({ type: "highlight", hotspotIds: ids })}
+              onFocusStep={(ids) =>
+                controller.dispatch([
+                  { type: "fadeOthers", hotspotIds: ids },
+                  ...(ids[0] ? [{ type: "focus" as const, hotspotId: ids[0] }] : []),
+                ])
+              }
               onExit={exitChallenge}
               onComplete={completeChallenge}
             />
-          ) : null}
-          {narration && mode !== "challenge" ? (
+           ) : null}
+           {narration ? (
             <p
               role="status"
-              className="pointer-events-none absolute left-4 top-16 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-xs text-muted-foreground backdrop-blur-md"
+              aria-live="polite"
+              className={`pointer-events-none absolute left-4 top-16 max-w-md rounded-full border px-3 py-1 text-xs backdrop-blur-md transition-opacity ${
+                mode === "challenge"
+                  ? "border-primary/40 bg-primary/10 text-primary"
+                  : "border-border/70 bg-background/80 text-muted-foreground"
+              }`}
             >
               {narration}
             </p>
-          ) : null}
-          {hotspot && mode !== "challenge" ? (
+           ) : null}
+           {hotspot && mode !== "challenge" ? (
             <div className="pointer-events-none absolute bottom-4 left-4 right-4 rounded-xl border border-accent/40 bg-background/80 p-3 backdrop-blur-md md:max-w-md">
               <p className="label-mono text-accent">{hotspot.category}</p>
               <p className="mt-1 font-display text-sm font-semibold">{hotspot.name}</p>
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                 {hotspot.summary}
               </p>
-              <ul className="mt-2 flex flex-wrap gap-1.5">
-                {hotspot.facts.map((f) => (
-                  <li
-                    key={f}
-                    className="rounded-full border border-border/70 px-2 py-0.5 text-[10px] text-muted-foreground"
-                  >
-                    {f}
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-2 hidden text-[11px] text-muted-foreground/80 md:block">
+                {hotspot.facts[0]}
+              </p>
             </div>
-          ) : mode !== "challenge" ? (
+           ) : mode !== "challenge" ? (
             <p className="pointer-events-none absolute bottom-4 left-4 text-xs text-muted-foreground">
               Drag to orbit · scroll to zoom · click a marker to ask the tutor
             </p>

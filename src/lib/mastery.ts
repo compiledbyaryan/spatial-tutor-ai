@@ -61,6 +61,8 @@ export type MasteryViewModel = {
   strongest: MasteryAxis;
   weakest: MasteryAxis;
   sentence: string;
+  /** Short evidence line naming what the weakest-axis claim rests on. */
+  weakEvidence: string | null;
   concepts: { id: string; name: string; level: number; attempts: number }[];
   recommended: Challenge | undefined;
 };
@@ -81,8 +83,24 @@ export function summarizeMastery(profile: MasteryProfile, scene: SceneModule): M
     level: Math.round(score * 100),
     attempts: profile.concepts[conceptId]?.attempts ?? 0,
   }));
-  const sentence = weakest === strongest
-    ? `Keep practicing ${AXIS_LABEL[weakest].toLowerCase()} to build stronger evidence.`
-    : `Your ${AXIS_LABEL[strongest].toLowerCase()} is strongest; ${AXIS_LABEL[weakest].toLowerCase()} is the next review target.`;
-  return { totalAttempts, levels, strongest, weakest, sentence, concepts, recommended: recommendNextChallenge(profile, scene.id) };
+  const sentence =
+    weakest === strongest
+      ? `Keep practicing ${AXIS_LABEL[weakest].toLowerCase()} to build stronger evidence.`
+      : `Your ${AXIS_LABEL[strongest].toLowerCase()} is strongest; ${AXIS_LABEL[weakest].toLowerCase()} is the next review target.`;
+  // Evidence line: weakest axis score + attempts, plus the lowest concept when present.
+  const weakScore = profile.categories[weakest];
+  const worstConcept = concepts[0];
+  const weakEvidence =
+    `${AXIS_LABEL[weakest].toLowerCase()} at ${Math.round(weakScore.score * 100)}% over ${weakScore.attempts} scored attempt${weakScore.attempts === 1 ? "" : "s"}` +
+    (worstConcept ? `; lowest concept “${worstConcept.name}” at ${worstConcept.level}%` : "");
+  return {
+    totalAttempts,
+    levels,
+    strongest,
+    weakest,
+    sentence,
+    weakEvidence,
+    concepts,
+    recommended: recommendNextChallenge(profile, scene.id),
+  };
 }

@@ -47,7 +47,7 @@ const layers = [
     points: [
       "A TanStack server function owns the model call; the API key never touches the browser bundle.",
       "The prompt carries module pedagogy, the full element inventory, the selected structure's dataset and the viewpoint description.",
-      "Streaming generation keeps long answers inside platform timeouts; gateway rate-limit and credit errors surface directly in the UI.",
+      "Structured replies validate against a shared contract; when inference is unavailable a deterministic offline answer uses the same shape.",
     ],
   },
 ];

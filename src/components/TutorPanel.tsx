@@ -86,8 +86,11 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions, onStageC
     ? [
         `Why is it shaped this way?`,
         `How does it relate to what's next to it?`,
+        ...(scene.id === "cardiac" && hotspot.id !== "left-ventricle"
+          ? [`Why is the left ventricle thicker than the right?`]
+          : []),
         `Quiz me on this structure`,
-      ]
+      ].slice(0, 3)
     : [`Orient me in this model`, `What should I look at first?`, `Give me a 30-second overview`];
 
   return (
@@ -143,16 +146,25 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions, onStageC
               className="max-w-[95%] rounded-lg rounded-bl-sm border border-border/70 bg-surface-raised/70 px-3 py-2.5"
             >
               {turn.focus ? <p className="label-mono mb-1.5">{turn.focus}</p> : null}
-              {turn.mode !== "live" ? <p className="label-mono mb-1.5 text-accent">{turn.mode} mode</p> : null}
               <p className="text-sm leading-relaxed text-foreground/90">{turn.content}</p>
+              {turn.mode && turn.mode !== "live" ? (
+                <p className="label-mono mt-2 inline-block rounded-full border border-border/60 px-2 py-0.5">
+                  {turn.mode === "demo" ? "guided demo answer" : "offline answer"}
+                </p>
+              ) : null}
             </div>
           ),
         )}
 
         {mutation.isPending ? (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
-            Reading your viewpoint…
+          <div className="space-y-2" role="status" aria-label="Tutor is reading your viewpoint">
+            <div className="h-3 w-3/4 animate-pulse rounded-full bg-secondary" />
+            <div className="h-3 w-full animate-pulse rounded-full bg-secondary" />
+            <div className="h-3 w-2/3 animate-pulse rounded-full bg-secondary" />
+            <p className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+              Reading your viewpoint…
+            </p>
           </div>
         ) : null}
 

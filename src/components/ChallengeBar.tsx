@@ -13,11 +13,21 @@ type Props = {
   onConsumeSelection: () => void;
   onEmphasize: (ids: string[]) => void;
   onReveal: (ids: string[]) => void;
+  onFocusStep: (ids: string[]) => void;
   onExit: () => void;
   onComplete: (outcome: ChallengeOutcome) => void;
 };
 
-export function ChallengeBar({ challenge, selection, onConsumeSelection, onEmphasize, onReveal, onExit, onComplete }: Props) {
+export function ChallengeBar({
+  challenge,
+  selection,
+  onConsumeSelection,
+  onEmphasize,
+  onReveal,
+  onFocusStep,
+  onExit,
+  onComplete,
+}: Props) {
   const [picked, setPicked] = useState<string[]>([]);
   const [misses, setMisses] = useState(0);
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -32,6 +42,11 @@ export function ChallengeBar({ challenge, selection, onConsumeSelection, onEmpha
     setFeedback(null);
     setFlash(null);
     startedAt.current = Date.now();
+    // Announce each step spatially: narrow the field to this step's
+    // candidates and glide the camera toward them.
+    if (expected.length > 0) onFocusStep(expected.slice(0, 3));
+    // Step changes carry new content; callback identities are stable dispatchers.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [challenge.id]);
 
   useEffect(() => {
@@ -73,8 +88,24 @@ export function ChallengeBar({ challenge, selection, onConsumeSelection, onEmpha
   }, [selection]);
 
   const progress = expected.length === 0 ? 0 : Math.round((picked.length / expected.length) * 100);
-  const title = ordered ? "Trace " + Math.min(picked.length + 1, expected.length) + " of " + expected.length : expected.length > 1 ? "Select " + expected.length + " structures" : "Select in the 3D model";
-  const border = flash === "good" ? "border-emerald-400/70" : flash === "bad" ? "border-destructive/70" : "border-border/70";
+  const title =
+    ordered
+      ? "Trace " + Math.min(picked.length + 1, expected.length) + " of " + expected.length
+      : expected.length > 1
+        ? "Select " + expected.length + " structures"
+        : "Select in the 3D model";
+  const border =
+    flash === "good"
+      ? "border-emerald-400/70"
+      : flash === "bad"
+        ? "border-destructive/70"
+        : "border-border/70";
+  const pickedNames = (ids: string[]) =>
+    ids
+      .map((id) => expected.find((candidate) => candidate === id) ?? id)
+      .map((id) => id.replace(/-/g, " "))
+      .map((name) => name.replace(/\b\w/g, (letter) => letter.toUpperCase()))
+      .join(" → ");
 
   return (
     <div role="region" aria-label={"Challenge: " + challenge.prompt} className={"pointer-events-auto absolute left-4 right-4 top-4 rounded-xl border bg-background/90 p-3 shadow-lg backdrop-blur-md transition-colors md:left-auto md:right-4 md:w-[390px] " + border}>
@@ -89,7 +120,32 @@ export function ChallengeBar({ challenge, selection, onConsumeSelection, onEmpha
         <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: progress + "%" }} />
       </div>
       <p className="mt-3 text-sm leading-relaxed">{challenge.prompt}</p>
-      {picked.length > 0 ? <p className="mt-2 text-xs text-muted-foreground">Selected: {picked.join(" → ")}</p> : null}
+      {picked.length > 0 ? (
+        <ol className="mt-2 flex flex-wrap items-center gap-1.5 text-xs" aria-label="Your path so far">
+          {picked.map((id, i) => (
+            <li key={id + i} className="flex items-center gap-1.5">
+              {i > 0 ? (
+                <span aria-hidden className="text-muted-foreground">
+                  →
+                </span>
+              ) : null}
+              <span className="rounded-full border border-emerald-400/50 bg-emerald-400/10 px-2 py-0.5 font-medium text-emerald-300">
+                {pickedNames([id])}
+              </span>
+            </li>
+          ))}
+          {ordered && picked.length < expected.length ? (
+            <li className="flex items-center gap-1.5">
+              <span aria-hidden className="text-muted-foreground">
+                →
+              </span>
+              <span className="rounded-full border border-dashed border-border px-2 py-0.5 text-muted-foreground">
+                {expected.length - picked.length} more
+              </span>
+            </li>
+          ) : null}
+        </ol>
+      ) : null}
       {feedback ? (
         <p className={"mt-2 flex items-start gap-1.5 text-sm " + (flash === "bad" ? "text-amber-300" : "text-emerald-400")} role="status">
           {flash === "bad" ? <XCircle className="mt-0.5 h-4 w-4 shrink-0" /> : <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />}

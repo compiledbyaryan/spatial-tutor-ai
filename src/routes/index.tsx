@@ -69,14 +69,13 @@ function Landing() {
           </div>
 
           <h1 style={{ animationDelay: "80ms" }} className="animate-reveal mt-6 max-w-4xl text-4xl leading-[1.05] font-bold md:text-6xl">
-            Stop learning three-dimensional subjects through
-            <span className="text-sheen"> flat media.</span>
+            An AI tutor that sees the same 3D space you see.
           </h1>
 
           <p style={{ animationDelay: "180ms" }} className="animate-reveal mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            SPATIA renders anatomy, molecular chemistry and architectural history as navigable 3D environments in the
-            browser. An AI tutor tracks your viewpoint and every structure you click, then explains exactly what you are
-            looking at — with the scale and spatial relationships a textbook diagram destroys.
+            SPATIA renders anatomy, molecules and architecture as navigable 3D environments in the
+            browser. Explore the Human Heart, click any structure, and the tutor explains exactly what you are
+            looking at — from the angle you are standing at — then tests you inside the same space.
           </p>
 
           <div style={{ animationDelay: "280ms" }} className="animate-reveal mt-9 flex flex-wrap items-center gap-3">
@@ -85,7 +84,7 @@ function Landing() {
               params={{ sceneId: "cardiac" }}
               className="inline-flex items-center gap-2 card-lift rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:-translate-y-0.5 hover:opacity-90 hover:shadow-[var(--shadow-glow)]"
             >
-              <Boxes className="h-4 w-4" /> Enter the 3D studio
+              <Boxes className="h-4 w-4" /> Open the Human Heart
             </Link>
             <Link
               to="/about"
@@ -95,12 +94,11 @@ function Landing() {
             </Link>
           </div>
 
-          <dl style={{ animationDelay: "380ms" }} className="animate-reveal mt-14 grid max-w-3xl grid-cols-2 gap-6 md:grid-cols-4">
+          <dl style={{ animationDelay: "380ms" }} className="animate-reveal mt-14 grid max-w-3xl grid-cols-2 gap-6 md:grid-cols-3">
             {[
               [String(scenes.length), "Spatial modules"],
-              [String(scenes.reduce((n, s) => n + s.hotspots.length, 0)), "Interactive structures"],
-              ["60 fps", "Target render loop"],
-              ["0", "Plugins to install"],
+              [String(scenes.reduce((n, s) => n + s.hotspots.length, 0)), "Clickable structures"],
+              ["5", "Steps in the flagship blood-flow trace"],
             ].map(([v, l]) => (
               <div key={l}>
                 <dt className="font-display text-2xl font-bold text-primary md:text-3xl">{v}</dt>
@@ -140,7 +138,7 @@ function Landing() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="label-mono text-primary">Learning modules</p>
-            <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Six spatial subjects, one engine</h2>
+            <h2 className="mt-2 text-2xl font-semibold md:text-3xl">Start with the heart, then see the engine generalize</h2>
           </div>
           <Compass className="hidden h-6 w-6 text-muted-foreground md:block" />
         </div>
