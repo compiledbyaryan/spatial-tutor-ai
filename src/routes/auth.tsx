@@ -87,7 +87,7 @@ function AuthPage() {
     <main className="relative min-h-screen">
       <AnimatedBackdrop />
       <SiteNav />
-      <section className="mx-auto flex max-w-md flex-col px-6 py-16">
+      <section className="mx-auto flex max-w-md flex-col px-6 pt-12 pb-16">
         <p className="label-mono text-primary">Student account</p>
         <h1 className="mt-2 text-3xl font-bold">{mode === "signin" ? "Welcome back" : "Start your study log"}</h1>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">

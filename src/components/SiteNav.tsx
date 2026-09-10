@@ -26,8 +26,11 @@ export function SiteNav() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl">
-      <nav className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 md:px-6">
+    <header className="sticky top-4 z-40 mx-auto max-w-6xl px-4 md:px-6">
+      <nav
+        aria-label="Primary"
+        className="panel flex items-center gap-3 px-4 py-2.5"
+      >
         <Link to="/" className="font-display text-base font-bold tracking-tight">
           SPATIA
         </Link>
@@ -37,7 +40,7 @@ export function SiteNav() {
               key={l.label}
               to={l.to}
               params={l.params}
-              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground"
+              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
             >
               <l.icon className="h-3.5 w-3.5" />
               {l.label}
@@ -52,7 +55,7 @@ export function SiteNav() {
                 onClick={async () => {
                   await supabase.auth.signOut();
                 }}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
               >
                 <LogOut className="h-3.5 w-3.5" /> Sign out
               </button>
@@ -60,7 +63,7 @@ export function SiteNav() {
           ) : (
             <Link
               to="/auth"
-              className="rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90"
             >
               Sign in
             </Link>

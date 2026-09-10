@@ -102,6 +102,13 @@
   --shadow-panel: 0 24px 60px -28px oklch(0.08 0.02 250 / 0.9);
   --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--primary) 35%, transparent),
     0 12px 40px -12px color-mix(in oklab, var(--primary) 45%, transparent);
+  --shadow-overlay: 0 20px 48px -16px oklch(0.06 0.02 250 / 0.85);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
+  --dur-instant: 120ms;
+  --dur-fast: 200ms;
+  --dur-lift: 350ms;
 }
 
 @layer base {
@@ -252,14 +259,45 @@
 
 @utility card-lift {
   transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.35s ease,
-    border-color 0.35s ease;
+    transform var(--dur-lift) var(--ease-out),
+    box-shadow var(--dur-lift) ease,
+    border-color var(--dur-lift) ease;
 }
 
 @utility card-lift-hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-glow);
+}
+
+/* Shared interactive transition for buttons, chips, list rows (150–300ms). */
+@utility ui-interactive {
+  transition:
+    color var(--dur-fast) ease,
+    background-color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease,
+    opacity var(--dur-fast) ease,
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) ease;
+}
+
+/* Crossfade for swapped microcopy (narration, feedback, turn content). */
+@keyframes ui-fade-swap {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-fade-swap {
+  animation: ui-fade-swap var(--dur-fast) var(--ease-out) both;
+}
+
+/* Ambient pulse for live/pending presence dots (decorative-adjacent, keep subtle). */
+@keyframes ui-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@utility animate-breathe {
+  animation: ui-breathe 2.4s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

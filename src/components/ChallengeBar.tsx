@@ -108,16 +108,42 @@ export function ChallengeBar({
       .join(" → ");
 
   return (
-    <div role="region" aria-label={"Challenge: " + challenge.prompt} className={"pointer-events-auto absolute left-4 right-4 top-4 rounded-xl border bg-background/90 p-3 shadow-lg backdrop-blur-md transition-colors md:left-auto md:right-4 md:w-[390px] " + border}>
+    <div
+      role="region"
+      aria-label={"Challenge: " + challenge.prompt}
+      className={
+        "animate-fade-swap pointer-events-auto absolute left-4 right-4 top-4 rounded-xl border bg-background/90 p-3 shadow-(--shadow-overlay) backdrop-blur-md md:left-auto md:right-4 md:w-[390px] " +
+        border
+      }
+    >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="label-mono text-primary">{CHALLENGE_TYPE_LABEL[challenge.type]} · Difficulty {challenge.difficulty}</p>
+          <p className="label-mono text-primary">
+            {CHALLENGE_TYPE_LABEL[challenge.type]} · Difficulty {challenge.difficulty}
+          </p>
           <p className="mt-1 font-display text-sm font-semibold">{title}</p>
         </div>
-        <button onClick={onExit} aria-label="Exit challenge" className="rounded-lg border border-border p-1.5 text-muted-foreground transition-colors hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
+        <button
+          onClick={onExit}
+          aria-label="Exit challenge"
+          title="Exit challenge and return to exploring"
+          className="ui-interactive shrink-0 cursor-pointer rounded-lg border border-border p-1.5 text-muted-foreground hover:text-foreground"
+        >
+          <X className="h-3.5 w-3.5" aria-hidden />
+        </button>
       </div>
-      <div className="mt-2 h-1 overflow-hidden rounded-full bg-secondary" aria-hidden>
-        <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: progress + "%" }} />
+      <div
+        className="mt-2 h-1 overflow-hidden rounded-full bg-secondary"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={expected.length}
+        aria-valuenow={picked.length}
+        aria-label="Challenge progress"
+      >
+        <div
+          className="h-full rounded-full bg-primary transition-all duration-300"
+          style={{ width: progress + "%" }}
+        />
       </div>
       <p className="mt-3 text-sm leading-relaxed">{challenge.prompt}</p>
       {picked.length > 0 ? (
@@ -147,12 +173,26 @@ export function ChallengeBar({
         </ol>
       ) : null}
       {feedback ? (
-        <p className={"mt-2 flex items-start gap-1.5 text-sm " + (flash === "bad" ? "text-amber-300" : "text-emerald-400")} role="status">
-          {flash === "bad" ? <XCircle className="mt-0.5 h-4 w-4 shrink-0" /> : <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />}
+        <p
+          key={feedback}
+          className={
+            "animate-fade-swap mt-2 flex items-start gap-1.5 text-sm " +
+            (flash === "bad" ? "text-amber-300" : "text-emerald-400")
+          }
+          role="status"
+        >
+          {flash === "bad" ? (
+            <XCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+          ) : (
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+          )}
           {feedback}
         </p>
       ) : (
-        <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground"><Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />A wrong selection unlocks a progressively more specific hint.</p>
+        <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground">
+          <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" aria-hidden />
+          A wrong selection unlocks a progressively more specific hint.
+        </p>
       )}
     </div>
   );
