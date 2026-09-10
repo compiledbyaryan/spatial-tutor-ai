@@ -14,16 +14,6 @@ Why it wins: Rendering advanced 3D models smoothly in a web browser is a great t
 
 give me a hackathon winning project make it clean , professional and add a lots of details which is mentioned above .... the project is designed by AYUSH KUMAR  and HARSH PRATAP
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/d6d4f4b3-d646-41fb-a2db-f015520e8a6e).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
 ## Development
 
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
