@@ -19,6 +19,16 @@ export type SceneModule = {
   accentLabel: string;
   /** Domain framing handed to the AI tutor as system context */
   tutorContext: string;
+  capabilities?: {
+    animations: string[];
+    labels: boolean;
+    isolation: boolean;
+  };
+  relations?: Array<{
+    from: string;
+    type: "flows_to" | "adjacent_to" | "supplies" | "part_of";
+    to: string;
+  }>;
   camera: { position: [number, number, number]; target: [number, number, number] };
   hotspots: Hotspot[];
 };
@@ -36,6 +46,16 @@ export const scenes: SceneModule[] = [
     accentLabel: "Anatomy",
     tutorContext:
       "You are teaching human cardiac anatomy and physiology to an undergraduate health-science student. Use correct anatomical terminology (superior/inferior, anterior/posterior), relate structure to function, and mention clinically relevant details when useful.",
+    capabilities: { animations: ["pulse"], labels: true, isolation: true },
+    relations: [
+      { from: "right-atrium", type: "flows_to", to: "right-ventricle" },
+      { from: "right-ventricle", type: "flows_to", to: "pulmonary-artery" },
+      { from: "left-atrium", type: "flows_to", to: "mitral-valve" },
+      { from: "mitral-valve", type: "flows_to", to: "left-ventricle" },
+      { from: "left-ventricle", type: "flows_to", to: "aorta" },
+      { from: "coronary", type: "supplies", to: "left-ventricle" },
+      { from: "left-ventricle", type: "adjacent_to", to: "right-ventricle" },
+    ],
     camera: { position: [4.2, 2.6, 5.4], target: [0, 0.2, 0] },
     hotspots: [
       {
