@@ -5,17 +5,19 @@ import { useEffect, useRef, useState } from "react";
 
 import { askTutor } from "@/lib/tutor.functions";
 import type { Hotspot, SceneModule } from "@/lib/scenes";
+import type { SceneAction, TutorResponse } from "@/lib/tutor-contracts";
 import type { Viewpoint } from "./scene/SceneCanvas";
 
-type Turn = { role: "user" | "assistant"; content: string; focus?: string };
+type Turn = { role: "user" | "assistant"; content: string; focus?: string; mode?: TutorResponse["mode"] };
 
 type Props = {
   scene: SceneModule;
   hotspot: Hotspot | null;
   viewpoint: Viewpoint | null;
+  onSceneActions?: (actions: SceneAction[]) => void;
 };
 
-export function TutorPanel({ scene, hotspot, viewpoint }: Props) {
+export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions }: Props) {
   const ask = useServerFn(askTutor);
   const [turns, setTurns] = useState<Turn[]>([]);
   const [draft, setDraft] = useState("");
@@ -34,7 +36,12 @@ export function TutorPanel({ scene, hotspot, viewpoint }: Props) {
         },
       }),
     onSuccess: (reply) => {
-      setTurns((t) => [...t, { role: "assistant", content: reply.answer, focus: reply.focus }]);
+      const focus = reply.focus ? scene.hotspots.find((item) => item.id === reply.focus)?.name ?? reply.focus : undefined;
+      setTurns((t) => [
+        ...t,
+        { role: "assistant", content: reply.answer, mode: reply.mode, ...(focus ? { focus } : {}) },
+      ]);
+      onSceneActions?.(reply.actions);
     },
   });
 
@@ -110,6 +117,7 @@ export function TutorPanel({ scene, hotspot, viewpoint }: Props) {
           ) : (
             <div key={i} className="max-w-[95%] rounded-lg rounded-bl-sm border border-border/70 bg-surface-raised/70 px-3 py-2.5">
               {turn.focus ? <p className="label-mono mb-1.5">{turn.focus}</p> : null}
+              {turn.mode !== "live" ? <p className="label-mono mb-1.5 text-accent">{turn.mode} mode</p> : null}
               <p className="text-sm leading-relaxed text-foreground/90">{turn.content}</p>
             </div>
           ),

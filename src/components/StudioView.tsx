@@ -5,6 +5,7 @@ import { useCallback, useMemo, useState } from "react";
 import { SceneCanvas, type Viewpoint } from "./scene/SceneCanvas";
 import { TutorPanel } from "./TutorPanel";
 import type { SceneModule } from "@/lib/scenes";
+import type { SceneAction } from "@/lib/tutor-contracts";
 
 const SCENE_TOGGLES: Record<string, { key: string; label: string }[]> = {
   cardiac: [{ key: "pulse", label: "Cardiac cycle animation" }],
@@ -27,6 +28,21 @@ export function StudioView({ scene }: { scene: SceneModule }) {
   const hotspot = useMemo(() => scene.hotspots.find((h) => h.id === activeId) ?? null, [scene, activeId]);
   const onViewpoint = useCallback((v: Viewpoint) => setViewpoint(v), []);
   const onSelect = useCallback((id: string) => setActiveId(id === "" ? null : id), []);
+  const onSceneActions = useCallback((actions: SceneAction[]) => {
+    for (const action of actions) {
+      if (action.type === "focus") setActiveId(action.hotspotId);
+      if ((action.type === "highlight" || action.type === "isolate" || action.type === "fadeOthers") && action.hotspotIds[0]) {
+        setActiveId(action.hotspotIds[0]);
+      }
+      if (action.type === "resetScene") {
+        setKey((value) => value + 1);
+        setActiveId(null);
+      }
+      if (action.type === "setAnimation") {
+        setOptions((value) => ({ ...value, [action.animation]: action.enabled }));
+      }
+    }
+  }, []);
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
@@ -150,7 +166,7 @@ export function StudioView({ scene }: { scene: SceneModule }) {
 
         {/* Tutor */}
         <aside className="order-3 min-h-[42vh] lg:min-h-0">
-          <TutorPanel scene={scene} hotspot={hotspot} viewpoint={viewpoint} />
+          <TutorPanel scene={scene} hotspot={hotspot} viewpoint={viewpoint} onSceneActions={onSceneActions} />
         </aside>
       </div>
     </div>

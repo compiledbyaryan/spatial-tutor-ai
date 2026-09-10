@@ -1,109 +1,118 @@
 import { createServerFn } from "@tanstack/react-start";
-import { streamText } from "ai";
+import { generateText, Output } from "ai";
 import { z } from "zod";
 
-import { createLovableAiGatewayProvider } from "./ai-gateway.server";
+import { createAiModel, getAiRuntimeConfig, isDemoMode } from "./ai-provider.server";
+import { heartChallenges } from "./challenge-bank";
+import { createDemoTutorResponse } from "./demo-tutor";
 import { getScene } from "./scenes";
+import {
+  ChallengeAttemptSchema,
+  ChallengeSchema,
+  MasteryProfileSchema,
+  TutorResponseSchema,
+  type TutorResponse,
+} from "./tutor-contracts";
+import { validateTutorResponse } from "./tutor-validation";
 
-const TutorInput = z.object({
-  sceneId: z.string().min(1),
-  hotspotId: z.string().optional(),
-  question: z.string().max(600).optional(),
-  /** Live viewer telemetry so the tutor knows where the student is standing */
-  viewpoint: z
-    .object({
-      position: z.tuple([z.number(), z.number(), z.number()]),
-      distance: z.number(),
-      azimuth: z.number(),
-      polar: z.number(),
-    })
-    .optional(),
-  history: z
-    .array(z.object({ role: z.enum(["user", "assistant"]), content: z.string() }))
-    .max(12)
-    .optional(),
-});
+const ModelTutorResponseSchema = TutorResponseSchema.omit({ mode: true });
+const MasterySummarySchema = MasteryProfileSchema.pick({ categories: true, concepts: true, updatedAt: true });
 
-export type TutorReply = {
-  answer: string;
-  focus: string;
-  viewpointNote: string;
-};
+const TutorInput = z
+  .object({
+    sceneId: z.string().trim().min(1).max(80),
+    hotspotId: z.string().trim().min(1).max(80).optional(),
+    question: z.string().trim().max(600).optional(),
+    viewpoint: z
+      .object({
+        position: z.tuple([z.number().finite(), z.number().finite(), z.number().finite()]),
+        distance: z.number().finite().min(0).max(10_000),
+        azimuth: z.number().finite().min(-100).max(100),
+        polar: z.number().finite().min(-100).max(100),
+      })
+      .strict()
+      .optional(),
+    history: z
+      .array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().trim().min(1).max(1200) }).strict())
+      .max(12)
+      .optional(),
+    masterySummary: MasterySummarySchema.optional(),
+    recentChallengeAttempts: z.array(ChallengeAttemptSchema).max(8).optional(),
+    activeChallenge: ChallengeSchema.optional(),
+    recentMisconceptions: z.array(z.string().trim().min(1).max(240)).max(6).optional(),
+  })
+  .strict();
 
 function describeViewpoint(v: NonNullable<z.infer<typeof TutorInput>["viewpoint"]>) {
   const deg = (r: number) => Math.round((r * 180) / Math.PI);
   const az = ((deg(v.azimuth) % 360) + 360) % 360;
-  const side =
-    az < 45 || az >= 315
-      ? "front"
-      : az < 135
-        ? "right side"
-        : az < 225
-          ? "rear"
-          : "left side";
+  const side = az < 45 || az >= 315 ? "front" : az < 135 ? "right side" : az < 225 ? "rear" : "left side";
   const elevation = deg(v.polar) < 55 ? "above" : deg(v.polar) > 110 ? "below" : "eye level";
   const proximity = v.distance < 4 ? "very close" : v.distance < 9 ? "medium range" : "wide view";
-  return `Camera is at the ${side}, viewing from ${elevation}, at ${proximity} (distance ${v.distance.toFixed(1)} units, position ${v.position.map((n) => n.toFixed(1)).join(", ")}).`;
+  return `Camera: ${side}, ${elevation}, ${proximity}; distance ${v.distance.toFixed(1)}; position ${v.position.map((n) => n.toFixed(1)).join(", ")}.`;
+}
+
+function safeContext(value: unknown, max = 3000) {
+  const serialized = JSON.stringify(value ?? null);
+  return serialized.length > max ? `${serialized.slice(0, max)}…` : serialized;
 }
 
 export const askTutor = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => TutorInput.parse(input))
-  .handler(async ({ data }): Promise<TutorReply> => {
-    const apiKey = process.env["LOVABLE_API_KEY"];
-    if (!apiKey) throw new Error("AI tutor is not configured (missing LOVABLE_API_KEY).");
-
+  .validator((input: unknown) => TutorInput.parse(input))
+  .handler(async ({ data }): Promise<TutorResponse> => {
     const scene = getScene(data.sceneId);
-    if (!scene) throw new Error(`Unknown module: ${data.sceneId}`);
+    if (!scene) throw new Error("Unknown learning module.");
+    const hotspot = data.hotspotId ? scene.hotspots.find((item) => item.id === data.hotspotId) : undefined;
+    if (data.hotspotId && !hotspot) throw new Error("Unknown structure for this learning module.");
 
-    const hotspot = data.hotspotId ? scene.hotspots.find((h) => h.id === data.hotspotId) : undefined;
-    const viewpointNote = data.viewpoint ? describeViewpoint(data.viewpoint) : "Viewpoint unavailable.";
-
-    const system = [
-      `You are SPATIA, a spatial-reasoning AI tutor embedded inside a real-time 3D learning environment.`,
-      scene.tutorContext,
-      `Module: "${scene.title}" (${scene.subject}).`,
-      `Interactive elements the student can select: ${scene.hotspots.map((h) => `${h.name} [${h.category}]`).join("; ")}.`,
-      `Live viewer telemetry: ${viewpointNote}`,
-      hotspot
-        ? `The student has just clicked "${hotspot.name}" (${hotspot.category}). Reference dataset: ${hotspot.summary} Key facts: ${hotspot.facts.join("; ")}.`
-        : `No element is currently selected.`,
-      `Rules: answer in 90-150 words of plain prose, no markdown headings, no bullet lists, no asterisks. Ground the explanation in what the student is literally looking at from their current angle and distance — mention the spatial relationship to at least one neighbouring structure. Be precise, warm and never invent facts that contradict the reference dataset.`,
-    ].join("\n");
-
-    const prompt = data.question?.trim()
-      ? data.question.trim()
-      : hotspot
-        ? `Explain ${hotspot.name} in the context of the whole model, given where I am standing.`
-        : `Orient me: what am I looking at from this viewpoint, and where should I look next?`;
-
-    const gateway = createLovableAiGatewayProvider(apiKey);
-
-    try {
-      const result = streamText({
-        model: gateway("google/gemini-3.7-flash"),
-        system,
-        messages: [
-          ...(data.history ?? []).map((m) => ({ role: m.role, content: m.content }) as const),
-          { role: "user" as const, content: prompt },
-        ],
-        temperature: 0.6,
+    const deterministicResponse = (fallback = false) =>
+      createDemoTutorResponse({
+        scene,
+        ...(data.hotspotId ? { hotspotId: data.hotspotId } : {}),
+        ...(data.question ? { question: data.question } : {}),
+        ...(fallback ? { fallback: true } : {}),
       });
 
-      const answer = (await result.text).trim();
-      return {
-        answer,
-        focus: hotspot?.name ?? "Free navigation",
-        viewpointNote,
-      };
+    if (isDemoMode()) return deterministicResponse();
+
+    const viewpointNote = data.viewpoint ? describeViewpoint(data.viewpoint) : "Viewpoint unavailable.";
+    const availableChallenges = heartChallenges
+      .filter((challenge) => challenge.sceneId === scene.id)
+      .map(({ id, type, prompt, concepts, difficulty }) => ({ id, type, prompt, concepts, difficulty }));
+    const system = [
+      "You are SPATIA, a spatial tutoring engine inside an interactive 3D scene.",
+      scene.tutorContext,
+      `Module: ${scene.title} (${scene.subject}).`,
+      `Allowed hotspots: ${scene.hotspots.map((item) => `${item.id}: ${item.name} — ${item.summary} Facts: ${item.facts.join("; ")}`).join("\n")}`,
+      `Scene relations: ${safeContext(scene.relations ?? [])}`,
+      `Capabilities: ${safeContext(scene.capabilities ?? { animations: [], labels: true, isolation: true })}`,
+      `Viewpoint: ${viewpointNote}`,
+      hotspot ? `Selected structure: ${hotspot.id} (${hotspot.name}).` : "No structure is selected.",
+      `Mastery summary: ${safeContext(data.masterySummary)}`,
+      `Recent attempts: ${safeContext(data.recentChallengeAttempts)}`,
+      `Active challenge: ${safeContext(data.activeChallenge)}`,
+      `Recent learning signals: ${safeContext(data.recentMisconceptions)}`,
+      `Curated challenges you may select by ID: ${safeContext(availableChallenges)}`,
+      "Return only the requested structured object. Use only allowed hotspot IDs and supported animations. If selecting a challenge, use its exact ID. Prefer 80–170 words. Ground claims in supplied facts. Scene actions are suggestions, never code. Do not diagnose the learner psychologically.",
+    ].join("\n");
+    const prompt = data.question?.trim() || (hotspot ? `Explain ${hotspot.name} in this view and decide what should happen next.` : "Orient me and decide what I should inspect next.");
+
+    try {
+      getAiRuntimeConfig();
+      const result = await generateText({
+        model: createAiModel(),
+        system,
+        messages: [
+          ...(data.history ?? []).slice(-8).map((message) => ({ role: message.role, content: message.content }) as const),
+          { role: "user" as const, content: prompt },
+        ],
+        output: Output.object({ schema: ModelTutorResponseSchema, name: "TutorResponse" }),
+        temperature: 0.35,
+        abortSignal: AbortSignal.timeout(12_000),
+      });
+      return validateTutorResponse({ ...result.output, mode: "live" }, scene);
     } catch (error) {
-      const status =
-        typeof error === "object" && error !== null && "statusCode" in error
-          ? Number((error as { statusCode?: unknown }).statusCode)
-          : undefined;
-      if (status === 429) throw new Error("The tutor is rate limited right now — try again in a few seconds.");
-      if (status === 402)
-        throw new Error("AI credits for this workspace are exhausted. Add credits in Lovable to resume the tutor.");
-      if (status === 403) throw new Error("AI access is blocked by workspace policy.");
-      throw new Error(error instanceof Error ? error.message : "The tutor could not answer that.");
+      console.warn("[SPATIA] AI inference unavailable; deterministic fallback used.", error instanceof Error ? error.name : "UnknownError");
+      return deterministicResponse(true);
     }
   });
