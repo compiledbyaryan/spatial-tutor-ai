@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 import { AnimatedBackdrop } from "@/components/AnimatedBackdrop";
 import { SiteNav } from "@/components/SiteNav";
-import { lovable } from "@/integrations/lovable";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth")({
@@ -35,7 +34,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard" });
+      if (data.session) navigate({ to: "/" });
     });
   }, [navigate]);
 
@@ -48,18 +47,18 @@ function AuthPage() {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { display_name: name }, emailRedirectTo: window.location.origin + "/dashboard" },
+          options: { data: { display_name: name }, emailRedirectTo: window.location.origin + "/" },
         });
         if (error) throw error;
         if (data.session) {
-          navigate({ to: "/dashboard" });
+            navigate({ to: "/" });
           return;
         }
         setMessage("Check your inbox to confirm your email, then sign in.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/dashboard" });
+        navigate({ to: "/" });
       }
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Something went wrong.");
@@ -71,14 +70,17 @@ function AuthPage() {
   async function google() {
     setBusy(true);
     setMessage(null);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (result.error) {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin + "/" },
+    });
+    if (error) {
       setMessage("Google sign-in failed. Try email instead.");
       setBusy(false);
       return;
     }
-    if (result.redirected) return;
-    navigate({ to: "/dashboard" });
+    if (data.url) return;
+    navigate({ to: "/" });
   }
 
   return (
