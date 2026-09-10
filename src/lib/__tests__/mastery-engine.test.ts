@@ -20,5 +20,11 @@ describe("mastery engine", () => {
     expect(updated.completedChallengeIds).toContain(challenge.id);
     expect(updated.categories.identification.score).toBeGreaterThan(0.5);
   });
-});
 
+  it("recommends an unpracticed weak category after a successful trace", () => {
+    const challenge = getChallenge("heart-trace-oxygenated")!;
+    const evaluation = evaluateChallenge({ challenge, selectedHotspotIds: challenge.expectedSequence!, responseTimeMs: 5000, attempts: 1, hintCount: 0 });
+    const updated = updateMastery(createMasteryProfile(), evaluation.attempt, challenge);
+    expect(recommendNextChallenge(updated)?.type).toBe("identify");
+  });
+});

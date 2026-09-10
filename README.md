@@ -31,7 +31,7 @@ AI_MODEL=gpt-4.1-mini
 
 - `src/lib/tutor-contracts.ts` is the shared frontend/backend Zod contract.
 - `src/lib/tutor.functions.ts` validates bounded input, supplies exact scene grounding, requests structured output, validates every action, and falls back safely.
-- `src/lib/challenge-bank.ts` contains 18 curated Human Heart challenges.
+- `src/lib/challenge-bank.ts` contains 19 curated Human Heart challenges.
 - `src/lib/challenge-engine.ts` scores selections and ordered traces deterministically.
 - `src/lib/mastery-engine.ts` applies bounded, explainable updates and recommends a weak-area challenge.
 - `src/lib/misconceptions.ts` derives cautious learning signals from observed attempts.
@@ -61,6 +61,5 @@ npm run build
 2. Select Left Ventricle.
 3. Ask: “Why is the left ventricle thicker than the right?”
 4. Ask for a trace challenge and run `heart-trace-oxygenated`.
-5. Submit `left-atrium → mitral-valve → left-ventricle → aorta`.
+5. Submit `left-atrium → mitral-valve → left-ventricle → aortic-valve → aorta`.
 6. Feed the returned mastery profile into the next submission or tutor call and use the returned recommendation to review a weak area.
-

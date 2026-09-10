@@ -6,6 +6,11 @@ import { supabase } from './client'
 // the browser never attaches the bearer token to serverFn RPCs.
 export const attachSupabaseAuth = createMiddleware({ type: 'function' }).client(
   async ({ next }) => {
+    const url = import.meta.env['VITE_SUPABASE_URL'] || process.env['SUPABASE_URL']
+    const key = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] || process.env['SUPABASE_PUBLISHABLE_KEY']
+    // Supabase is optional for the hackathon/demo path. Avoid instantiating the
+    // lazy client when no account persistence endpoint is configured.
+    if (!url || !key) return next()
     const { data } = await supabase.auth.getSession()
     const token = data.session?.access_token
     return next({

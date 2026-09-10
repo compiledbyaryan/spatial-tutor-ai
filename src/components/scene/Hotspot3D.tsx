@@ -9,10 +9,19 @@ type Props = {
   hotspot: Hotspot;
   active: boolean;
   index: number;
+  dimmed?: boolean;
+  showLabel?: boolean;
   onSelect: (id: string) => void;
 };
 
-export function Hotspot3D({ hotspot, active, index, onSelect }: Props) {
+export function Hotspot3D({
+  hotspot,
+  active,
+  index,
+  dimmed = false,
+  showLabel = true,
+  onSelect,
+}: Props) {
   const ref = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
 
@@ -43,7 +52,12 @@ export function Hotspot3D({ hotspot, active, index, onSelect }: Props) {
       >
         <mesh>
           <sphereGeometry args={[0.16, 24, 24]} />
-          <meshBasicMaterial color={active ? "#ffc561" : "#7fe6ef"} toneMapped={false} />
+          <meshBasicMaterial
+            color={active ? "#ffc561" : "#7fe6ef"}
+            toneMapped={false}
+            transparent={dimmed && !active}
+            opacity={dimmed && !active ? 0.35 : 1}
+          />
         </mesh>
         <mesh>
           <sphereGeometry args={[0.3, 20, 20]} />
@@ -56,20 +70,22 @@ export function Hotspot3D({ hotspot, active, index, onSelect }: Props) {
         </mesh>
       </group>
 
-      <Html center distanceFactor={12} style={{ pointerEvents: "none" }}>
-        <div
-          className={`whitespace-nowrap rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-widest uppercase transition-opacity ${
-            active
-              ? "border-accent/60 bg-accent/15 text-accent opacity-100"
-              : hovered
-                ? "border-primary/60 bg-background/80 text-primary opacity-100"
-                : "border-border/60 bg-background/60 text-muted-foreground opacity-70"
-          }`}
-          style={{ transform: "translateY(-2.2rem)" }}
-        >
-          {String(index + 1).padStart(2, "0")} · {hotspot.name}
-        </div>
-      </Html>
+      {showLabel ? (
+        <Html center distanceFactor={12} style={{ pointerEvents: "none" }}>
+          <div
+            className={`whitespace-nowrap rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-widest uppercase transition-opacity ${
+              active
+                ? "border-accent/60 bg-accent/15 text-accent opacity-100"
+                : hovered
+                  ? "border-primary/60 bg-background/80 text-primary opacity-100"
+                  : "border-border/60 bg-background/60 text-muted-foreground opacity-70"
+            }`}
+            style={{ transform: "translateY(-2.2rem)" }}
+          >
+            {String(index + 1).padStart(2, "0")} · {hotspot.name}
+          </div>
+        </Html>
+      ) : null}
     </group>
   );
 }

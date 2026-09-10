@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, Send, Sparkles, Crosshair } from "lucide-react";
+import { Eye, Loader2, Send, Sparkles, Crosshair, Swords } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { askTutor } from "@/lib/tutor.functions";
 import type { Hotspot, SceneModule } from "@/lib/scenes";
-import type { SceneAction, TutorResponse } from "@/lib/tutor-contracts";
+import type { Challenge, ChallengeAttempt, MasterySummary, SceneAction, TutorResponse } from "@/lib/tutor-contracts";
 import type { Viewpoint } from "./scene/SceneCanvas";
 
 type Turn = { role: "user" | "assistant"; content: string; focus?: string; mode?: TutorResponse["mode"] };
@@ -15,9 +15,18 @@ type Props = {
   hotspot: Hotspot | null;
   viewpoint: Viewpoint | null;
   onSceneActions?: (actions: SceneAction[]) => void;
+  /** Heart flagship: stages the LV-vs-RV compare view for the canonical question. */
+  onStageCompare?: (() => void) | undefined;
+  /** Enters a canonical challenge returned by the tutor, or the scene default. */
+  onStartChallenge?: ((challenge?: Challenge) => void) | undefined;
+  masterySummary?: MasterySummary | undefined;
+  recentChallengeAttempts?: ChallengeAttempt[] | undefined;
+  recentMisconceptions?: string[] | undefined;
 };
 
-export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions }: Props) {
+const COMPARE_QUESTION = /thicker|compare|left ventricle.*right|right.*left ventricle/i;
+
+export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions, onStageCompare, onStartChallenge, masterySummary, recentChallengeAttempts, recentMisconceptions }: Props) {
   const ask = useServerFn(askTutor);
   const [turns, setTurns] = useState<Turn[]>([]);
   const [draft, setDraft] = useState("");
@@ -33,6 +42,9 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions }: Props)
           question: vars.question,
           viewpoint: viewpoint ?? undefined,
           history: turns.slice(-6).map(({ role, content }) => ({ role, content })),
+          masterySummary,
+          recentChallengeAttempts: recentChallengeAttempts?.slice(-8),
+          recentMisconceptions: recentMisconceptions?.slice(-6),
         },
       }),
     onSuccess: (reply) => {
@@ -42,6 +54,7 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions }: Props)
         { role: "assistant", content: reply.answer, mode: reply.mode, ...(focus ? { focus } : {}) },
       ]);
       onSceneActions?.(reply.actions);
+      if (reply.challenge) onStartChallenge?.(reply.challenge);
     },
   });
 
@@ -61,13 +74,20 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions }: Props)
   function submit(question: string) {
     const q = question.trim();
     if (!q || mutation.isPending) return;
+    // Deterministic local staging for the flagship compare question:
+    // works with or without the live LLM.
+    if (onStageCompare && COMPARE_QUESTION.test(q)) onStageCompare();
     setTurns((t) => [...t, { role: "user", content: q }]);
     setDraft("");
     mutation.mutate({ question: q, hotspotId: hotspot?.id });
   }
 
   const suggestions = hotspot
-    ? [`Why is it shaped this way?`, `How does it relate to what's next to it?`, `Quiz me on this structure`]
+    ? [
+        `Why is it shaped this way?`,
+        `How does it relate to what's next to it?`,
+        `Quiz me on this structure`,
+      ]
     : [`Orient me in this model`, `What should I look at first?`, `Give me a 30-second overview`];
 
   return (
@@ -103,19 +123,25 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions }: Props)
           <div className="rounded-lg border border-dashed border-border/80 bg-background/40 p-4">
             <Sparkles className="h-4 w-4 text-primary" />
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              Click any marker in the 3D model and I'll explain exactly what you're looking at — from the angle you're
-              looking at it. Or just ask me something about {scene.title}.
+              Click any marker in the 3D model and I'll explain exactly what you're looking at —
+              from the angle you're looking at it. Or just ask me something about {scene.title}.
             </p>
           </div>
         ) : null}
 
         {turns.map((turn, i) =>
           turn.role === "user" ? (
-            <div key={i} className="ml-auto max-w-[85%] rounded-lg rounded-br-sm bg-primary/15 px-3 py-2 text-sm text-foreground">
+            <div
+              key={i}
+              className="ml-auto max-w-[85%] rounded-lg rounded-br-sm bg-primary/15 px-3 py-2 text-sm text-foreground"
+            >
               {turn.content}
             </div>
           ) : (
-            <div key={i} className="max-w-[95%] rounded-lg rounded-bl-sm border border-border/70 bg-surface-raised/70 px-3 py-2.5">
+            <div
+              key={i}
+              className="max-w-[95%] rounded-lg rounded-bl-sm border border-border/70 bg-surface-raised/70 px-3 py-2.5"
+            >
               {turn.focus ? <p className="label-mono mb-1.5">{turn.focus}</p> : null}
               {turn.mode !== "live" ? <p className="label-mono mb-1.5 text-accent">{turn.mode} mode</p> : null}
               <p className="text-sm leading-relaxed text-foreground/90">{turn.content}</p>
@@ -131,13 +157,32 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions }: Props)
         ) : null}
 
         {mutation.isError ? (
-          <p className="rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive-foreground">
-            {(mutation.error as Error).message}
-          </p>
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">
+            <p className="text-destructive-foreground">{(mutation.error as Error).message}</p>
+            {onStartChallenge ? (
+              <button
+                onClick={() => onStartChallenge()}
+                className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-xs text-foreground transition-colors hover:border-primary/60 hover:text-primary"
+              >
+                <Swords className="h-3.5 w-3.5" /> The tutor is offline — practice in 3D instead
+              </button>
+            ) : null}
+          </div>
         ) : null}
       </div>
 
       <div className="border-t border-border/70 px-4 py-3">
+        {onStageCompare && scene.id === "cardiac" ? (
+          <button
+            onClick={() => {
+              submit("Why is the left ventricle thicker than the right?");
+            }}
+            disabled={mutation.isPending}
+            className="mb-2 inline-flex w-full items-center justify-center gap-1.5 rounded-xl border border-accent/50 bg-accent/10 px-3 py-2 text-xs font-medium text-accent transition-colors hover:bg-accent/15 disabled:opacity-50"
+          >
+            <Eye className="h-3.5 w-3.5" /> Show me: why is the left ventricle thicker?
+          </button>
+        ) : null}
         <div className="mb-2 flex flex-wrap gap-1.5">
           {suggestions.map((s) => (
             <button

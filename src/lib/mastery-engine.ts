@@ -2,6 +2,7 @@ import { heartChallenges } from "./challenge-bank";
 import type { Challenge, ChallengeAttempt, MasteryProfile, MasteryScore } from "./tutor-contracts";
 
 export type MasteryCategory = keyof MasteryProfile["categories"];
+const MASTERY_CATEGORIES: MasteryCategory[] = ["identification", "function", "spatialRelation", "flowReasoning"];
 
 const DEFAULT_SCORE: MasteryScore = { score: 0.5, confidence: 0, attempts: 0 };
 
@@ -73,8 +74,17 @@ export function getWeakConcepts(profile: MasteryProfile, limit = 3): Array<{ con
     .slice(0, Math.max(0, limit));
 }
 
+export function getWeakestMasteryCategory(profile: MasteryProfile): MasteryCategory {
+  return [...MASTERY_CATEGORIES].sort((a, b) =>
+    profile.categories[a].score - profile.categories[b].score ||
+    profile.categories[a].confidence - profile.categories[b].confidence ||
+    MASTERY_CATEGORIES.indexOf(a) - MASTERY_CATEGORIES.indexOf(b),
+  )[0]!;
+}
+
 export function recommendNextChallenge(profile: MasteryProfile, sceneId = "cardiac"): Challenge | undefined {
   const weak = getWeakConcepts(profile, 5).map((item) => item.conceptId);
+  const weakestCategory = getWeakestMasteryCategory(profile);
   const candidates = heartChallenges.filter((challenge) => challenge.sceneId === sceneId);
   const unfinished = candidates.filter((challenge) => !profile.completedChallengeIds.includes(challenge.id));
   const pool = unfinished.length > 0 ? unfinished : candidates;
@@ -82,8 +92,10 @@ export function recommendNextChallenge(profile: MasteryProfile, sceneId = "cardi
   const preferredDifficulty = recentSuccesses >= 2 ? 2 : 1;
 
   return [...pool].sort((a, b) => {
+    const aCategory = categoryByChallengeType[a.type] === weakestCategory ? 1 : 0;
+    const bCategory = categoryByChallengeType[b.type] === weakestCategory ? 1 : 0;
     const aWeak = a.concepts.filter((concept) => weak.includes(concept)).length;
     const bWeak = b.concepts.filter((concept) => weak.includes(concept)).length;
-    return bWeak - aWeak || Math.abs(a.difficulty - preferredDifficulty) - Math.abs(b.difficulty - preferredDifficulty) || a.id.localeCompare(b.id);
+    return bCategory - aCategory || bWeak - aWeak || Math.abs(a.difficulty - preferredDifficulty) - Math.abs(b.difficulty - preferredDifficulty) || a.id.localeCompare(b.id);
   })[0];
 }

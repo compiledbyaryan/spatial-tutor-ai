@@ -1,13 +1,23 @@
 import { describe, expect, it } from "vitest";
 
-import { evaluateChallenge, getChallenge, scoreChallengeSelection } from "../challenge-engine";
+import { evaluateChallenge, getChallenge, getChallenges, scoreChallengeSelection } from "../challenge-engine";
+import { getScene } from "../scenes";
 
 describe("challenge engine", () => {
   const trace = getChallenge("heart-trace-oxygenated")!;
 
   it("scores trace order exactly", () => {
-    expect(scoreChallengeSelection(trace, ["left-atrium", "mitral-valve", "left-ventricle", "aorta"])).toBe(true);
+    expect(scoreChallengeSelection(trace, ["left-atrium", "mitral-valve", "left-ventricle", "aortic-valve", "aorta"])).toBe(true);
     expect(scoreChallengeSelection(trace, ["left-atrium", "left-ventricle", "mitral-valve", "aorta"])).toBe(false);
+  });
+
+  it("uses only selectable hotspot IDs", () => {
+    const heartIds = new Set(getScene("cardiac")!.hotspots.map((hotspot) => hotspot.id));
+    for (const challenge of getChallenges("cardiac")) {
+      for (const id of challenge.expectedSequence ?? challenge.targetHotspotIds ?? []) {
+        expect(heartIds.has(id), `${challenge.id} references ${id}`).toBe(true);
+      }
+    }
   });
 
   it("scores compare selections without depending on order", () => {
@@ -21,4 +31,3 @@ describe("challenge engine", () => {
     expect(result.hint).toContain("Left atrium");
   });
 });
-

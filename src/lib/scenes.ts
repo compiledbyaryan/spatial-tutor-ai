@@ -52,7 +52,8 @@ export const scenes: SceneModule[] = [
       { from: "right-ventricle", type: "flows_to", to: "pulmonary-artery" },
       { from: "left-atrium", type: "flows_to", to: "mitral-valve" },
       { from: "mitral-valve", type: "flows_to", to: "left-ventricle" },
-      { from: "left-ventricle", type: "flows_to", to: "aorta" },
+      { from: "left-ventricle", type: "flows_to", to: "aortic-valve" },
+      { from: "aortic-valve", type: "flows_to", to: "aorta" },
       { from: "coronary", type: "supplies", to: "left-ventricle" },
       { from: "left-ventricle", type: "adjacent_to", to: "right-ventricle" },
     ],
@@ -133,6 +134,15 @@ export const scenes: SceneModule[] = [
         summary:
           "The bicuspid atrioventricular valve, tethered by chordae tendineae to papillary muscles that prevent prolapse under pressure.",
         facts: ["Two leaflets, anterior and posterior", "Closure produces the S1 heart sound", "Area ≈ 4–6 cm²"],
+      },
+      {
+        id: "aortic-valve",
+        name: "Aortic Valve",
+        position: [-1.0, -0.15, 0.55],
+        category: "Valve",
+        summary:
+          "The three-cusped semilunar valve at the left-ventricular outflow tract, opening into the aortic root during systole and preventing diastolic backflow.",
+        facts: ["Three semilunar cusps", "Opens during ventricular systole", "Closure contributes to the S2 heart sound"],
       },
     ],
   },

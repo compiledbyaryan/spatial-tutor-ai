@@ -23,6 +23,8 @@ export function createAiModel(config = getAiRuntimeConfig()) {
 }
 
 export function isDemoMode(env: NodeJS.ProcessEnv = process.env): boolean {
-  return ["1", "true", "yes", "on"].includes((env["DEMO_MODE"] ?? "").trim().toLowerCase());
+  const explicit = env["DEMO_MODE"]?.trim().toLowerCase();
+  if (explicit) return ["1", "true", "yes", "on"].includes(explicit);
+  // A fresh clone with no secrets must take the guaranteed offline path.
+  return !env["AI_API_KEY"]?.trim();
 }
-
