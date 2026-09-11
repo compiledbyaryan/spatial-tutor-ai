@@ -68,7 +68,7 @@ export function ChallengeBar({
     onEmphasize(nextPicked);
     if (nextPicked.length < expected.length) {
       const remaining = expected.length - nextPicked.length;
-      setFeedback("Correct so far — " + remaining + " selection" + (remaining === 1 ? "" : "s") + " remaining.");
+      setFeedback("Correct so far. " + remaining + " selection" + (remaining === 1 ? "" : "s") + " remaining.");
       setFlash("good");
       window.setTimeout(() => setFlash(null), 700);
       return;
@@ -101,19 +101,19 @@ export function ChallengeBar({
       .map((name) => name.replace(/\b\w/g, (letter) => letter.toUpperCase()))
       .join(" → ");
   const feedbackTone =
-    flash === "bad" ? "border-[#EAEAEA] bg-[#FBF3DB]" : "border-[#EAEAEA] bg-[#EDF3EC]";
+    flash === "bad" ? "border-amber-300/30 bg-amber-400/10" : "border-emerald-300/30 bg-emerald-400/10";
 
   return (
     <div
       role="region"
       aria-label={"Challenge: " + challenge.prompt}
-      className="animate-fade-swap pointer-events-auto absolute left-4 right-4 top-4 border border-[#EAEAEA] bg-white p-6 md:left-auto md:right-4 md:w-[390px]"
-      style={{ borderRadius: 8 }}
+      className="animate-fade-swap pointer-events-auto absolute left-4 right-4 top-4 border border-white/10 bg-black/70 p-6 backdrop-blur-2xl md:left-auto md:right-4 md:w-[390px]"
+      style={{ borderRadius: "calc(2rem - 0.375rem)" }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="font-mono text-xs uppercase tracking-[0.05em] text-[#787774]">
-            {CHALLENGE_TYPE_LABEL[challenge.type]} · Level {challenge.difficulty}
+          <p className="font-mono text-xs uppercase tracking-[0.05em] text-zinc-500">
+            {CHALLENGE_TYPE_LABEL[challenge.type]} Level {challenge.difficulty}
           </p>
           <h2 className="mt-2 font-display text-xl font-semibold leading-snug tracking-tight">{title}</h2>
         </div>
@@ -121,51 +121,51 @@ export function ChallengeBar({
           onClick={onExit}
           aria-label="Exit challenge"
           title="Exit challenge and return to exploring"
-          className="ui-interactive shrink-0 cursor-pointer border border-[#EAEAEA] bg-white p-1.5 text-[#787774] hover:text-[#111111]"
-          style={{ borderRadius: 6 }}
+          className="ui-interactive shrink-0 cursor-pointer border border-white/10 bg-white/5 p-1.5 text-zinc-500 hover:text-zinc-100"
+          style={{ borderRadius: 9999 }}
         >
           <IconClose className="h-4 w-4" />
         </button>
       </div>
       <div
-        className="mt-4 border-t border-[#EAEAEA] pt-4"
+        className="mt-4 border-t border-white/10 pt-4"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={expected.length}
         aria-valuenow={picked.length}
         aria-label="Challenge progress"
       >
-        <div className="h-1 overflow-hidden bg-[#EAEAEA]" style={{ borderRadius: 9999 }}>
+        <div className="h-1 overflow-hidden bg-white/10" style={{ borderRadius: 9999 }}>
           <div
-            className="h-full bg-[#111111] transition-all duration-300"
+            className="h-full bg-emerald-300 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]"
             style={{ width: progress + "%" }}
           />
         </div>
-        <p className="mt-2 font-mono text-xs tabular-nums text-[#787774]">
+        <p className="mt-2 font-mono text-xs tabular-nums text-zinc-500">
           {picked.length} of {expected.length} selected
         </p>
       </div>
-      <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-[#2F3437]">{challenge.prompt}</p>
+      <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-zinc-300">{challenge.prompt}</p>
       {picked.length > 0 ? (
         <ol className="mt-2 flex flex-wrap items-center gap-1.5 text-xs" aria-label="Your path so far">
           {picked.map((id, i) => (
             <li key={id + i} className="flex items-center gap-1.5">
               {i > 0 ? (
-                <span aria-hidden className="text-muted-foreground">
+                <span aria-hidden className="text-zinc-500">
                   →
                 </span>
               ) : null}
-              <span className="bg-[#E1F3FE] px-2 py-0.5 text-xs font-medium uppercase tracking-[0.05em] text-[#1F6C9F]" style={{ borderRadius: 9999 }}>
+              <span className="bg-emerald-400/10 px-2 py-0.5 text-xs font-medium uppercase tracking-[0.05em] text-emerald-300" style={{ borderRadius: 9999 }}>
                 {pickedNames([id])}
               </span>
             </li>
           ))}
           {ordered && picked.length < expected.length ? (
             <li className="flex items-center gap-1.5">
-              <span aria-hidden className="text-muted-foreground">
+              <span aria-hidden className="text-zinc-500">
                 →
               </span>
-              <span className="border border-dashed border-[#EAEAEA] px-2 py-0.5 text-xs text-[#787774]" style={{ borderRadius: 9999 }}>
+              <span className="border border-dashed border-white/15 px-2 py-0.5 text-xs text-zinc-500" style={{ borderRadius: 9999 }}>
                 {expected.length - picked.length} more
               </span>
             </li>
@@ -177,18 +177,18 @@ export function ChallengeBar({
           key={feedback}
           role="status"
           className={`animate-fade-swap mt-4 flex items-start gap-2 border px-3 py-2.5 text-sm ${feedbackTone}`}
-          style={{ borderRadius: 8 }}
+          style={{ borderRadius: "calc(2rem - 0.75rem)" }}
         >
           {flash === "bad" ? (
-            <IconCross className="mt-0.5 h-4 w-4 shrink-0 text-[#956400]" />
+            <IconCross className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
           ) : (
-            <IconCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#346538]" />
+            <IconCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
           )}
-          <p className="leading-relaxed text-[#111111]">{feedback}</p>
+          <p className="leading-relaxed text-zinc-100">{feedback}</p>
         </div>
       ) : (
-        <p className="mt-3 flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground">
-          <IconBulb className="mt-0.5 h-4 w-4 shrink-0 text-[#787774]" />
+        <p className="mt-3 flex items-start gap-1.5 text-xs leading-relaxed text-zinc-500">
+          <IconBulb className="mt-0.5 h-4 w-4 shrink-0 text-zinc-500" />
           A wrong selection unlocks a progressively more specific hint.
         </p>
       )}

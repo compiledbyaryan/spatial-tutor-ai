@@ -53,7 +53,7 @@ export function Hotspot3D({
         <mesh>
           <sphereGeometry args={[0.16, 24, 24]} />
           <meshBasicMaterial
-            color={active ? "#ffc561" : "#7fe6ef"}
+            color={active ? "#6ee7b7" : "#10b981"}
             toneMapped={false}
             transparent={dimmed && !active}
             opacity={dimmed && !active ? 0.35 : 1}
@@ -62,9 +62,9 @@ export function Hotspot3D({
         <mesh>
           <sphereGeometry args={[0.3, 20, 20]} />
           <meshBasicMaterial
-            color={active ? "#ffc561" : "#7fe6ef"}
+            color={active ? "#6ee7b7" : "#10b981"}
             transparent
-            opacity={hovered || active ? 0.28 : 0.12}
+            opacity={hovered || active ? 0.32 : 0.14}
             toneMapped={false}
           />
         </mesh>
@@ -73,16 +73,16 @@ export function Hotspot3D({
       {showLabel ? (
         <Html center distanceFactor={12} style={{ pointerEvents: "none" }}>
           <div
-            className={`whitespace-nowrap border px-2 py-1 text-[11px] transition-opacity ${
+            className={`whitespace-nowrap border px-3 py-1 text-[11px] backdrop-blur-2xl transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
               active
-                ? "border-[#111111] bg-[#111111] font-semibold text-white opacity-100"
+                ? "border-emerald-300/60 bg-emerald-400 font-semibold text-emerald-950 opacity-100"
                 : hovered
-                  ? "border-[#111111] bg-white font-medium text-[#111111] opacity-100"
-                  : "border-[#EAEAEA] bg-white/95 text-[#2F3437] opacity-95"
+                  ? "border-white/20 bg-black/70 font-medium text-white opacity-100"
+                  : "border-white/10 bg-black/60 text-zinc-300 opacity-95"
             }`}
-            style={{ transform: "translateY(-2.2rem)", borderRadius: 6 }}
+            style={{ transform: "translateY(-2.2rem)", borderRadius: 9999 }}
           >
-            <span className="mr-1.5 font-mono text-[10px] text-[#787774] tabular-nums">
+            <span className="mr-1.5 font-mono text-[10px] text-current tabular-nums opacity-70">
               {String(index + 1).padStart(2, "0")}
             </span>
             {hotspot.name}

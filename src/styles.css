@@ -5,9 +5,11 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * SPATIA design system — minimalist-ui protocol (skill overrides prior themes here).
- * Warm monochrome canvas, ink CTA, Newsreader serif display, system sans UI,
- * JetBrains Mono for data only. Flat surfaces, hairline borders, no glow.
+ * SPATIA design system — high-end-visual-design protocol (variant 3).
+ * Ethereal Glass on OLED black. Vantablack shells, white/10 hairlines,
+ * emerald signal. Plus Jakarta Sans display and UI, JetBrains Mono data.
+ * Shape rule: squircle 2rem shells, concentric inner cores, full-pill CTAs
+ * with nested trailing icon islands. One accent (emerald) page-wide.
  */
 
 @theme inline {
@@ -17,9 +19,9 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
-  --font-display: "Newsreader", "Instrument Serif", Georgia, serif;
-  --font-sans: "Archivo", "SF Pro Display", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: "Geist Mono", "SF Mono", "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Plus Jakarta Sans", "Geist", system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Geist Mono", ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -56,64 +58,60 @@
 }
 
 :root {
-  --radius: 0.375rem;
+  --radius: 0.75rem;
 
-  --background: #fbfbfa;
-  --foreground: #111111;
+  --background: #050505;
+  --foreground: #f4f4f5;
 
-  --surface: #ffffff;
-  --surface-raised: #f9f9f8;
+  --surface: #0c0c0e;
+  --surface-raised: #141416;
 
-  --card: #ffffff;
-  --card-foreground: #111111;
-  --popover: #ffffff;
-  --popover-foreground: #111111;
+  --card: #0c0c0e;
+  --card-foreground: #f4f4f5;
+  --popover: #101012;
+  --popover-foreground: #f4f4f5;
 
-  --primary: #111111;
-  --primary-foreground: #ffffff;
+  --primary: #10b981;
+  --primary-foreground: #04120c;
 
-  --secondary: #f7f6f3;
-  --secondary-foreground: #111111;
+  --secondary: #141416;
+  --secondary-foreground: #f4f4f5;
 
-  --muted: #f7f6f3;
-  --muted-foreground: #787774;
+  --muted: #141416;
+  --muted-foreground: #a1a1aa;
 
-  /* Ink: sole saturated action color (reserved for primary CTA + send). */
-  --ink: #111111;
-  /* Spot pastels — semantic meaning only, always paired with dark text. */
-  --accent: #e1f3fe;
-  --accent-foreground: #1f6c9f;
+  --ink: #f4f4f5;
+  --accent: #123f31;
+  --accent-foreground: #a7f3d0;
 
-  --destructive: #9f2f2d;
-  --destructive-foreground: #ffffff;
+  --destructive: #f87171;
+  --destructive-foreground: #1a0505;
 
-  /* Caution (hint / retry feedback): pale yellow wash + dark text. */
-  --caution: #fbf3db;
-  --caution-foreground: #956400;
-  /* Good (success feedback): pale green wash + dark text. */
-  --good: #edf3ec;
-  --good-foreground: #346538;
+  --caution: #2a230f;
+  --caution-foreground: #fcd34d;
+  --good: #0c2b1f;
+  --good-foreground: #6ee7b7;
 
-  --border: #eaeaea;
-  --input: #eaeaea;
-  --ring: #111111;
-  --grid: #eaeaea;
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.12);
+  --ring: #10b981;
+  --grid: rgb(255 255 255 / 0.06);
 
-  --chart-1: #2f3437;
-  --chart-2: #346538;
-  --chart-3: #956400;
-  --chart-4: #1f6c9f;
-  --chart-5: #9f2f2d;
+  --chart-1: #e4e4e7;
+  --chart-2: #6ee7b7;
+  --chart-3: #fcd34d;
+  --chart-4: #7dd3fc;
+  --chart-5: #f87171;
 
-  /* Flat surfaces — depth comes from hairlines, never shadows. */
-  --shadow-panel: 0 0 0 rgb(0 0 0 / 0);
-  --shadow-overlay: 0 2px 8px rgb(0 0 0 / 0.04);
+  /* Cinematic depth: glass blur shells, diffused ambient shadow, inner highlight. */
+  --shadow-panel: 0 30px 80px rgb(0 0 0 / 0.55);
+  --shadow-overlay: 0 18px 60px rgb(0 0 0 / 0.5);
 
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
   --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
   --dur-instant: 120ms;
-  --dur-fast: 100ms;
-  --dur-lift: 350ms;
+  --dur-fast: 200ms;
+  --dur-lift: 700ms;
 }
 
 @layer base {
@@ -123,7 +121,7 @@
 
   body {
     background-color: var(--color-background);
-    color: #111111;
+    color: #f4f4f5;
     font-family: var(--font-sans);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -134,15 +132,27 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
   }
 }
 
+/* Double-bezel shell: machined tray holding a glass inner core. */
 @utility panel {
-  background-color: #ffffff;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
+  background-color: rgb(255 255 255 / 0.05);
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 2rem;
+  padding: 0.375rem;
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+@utility panel-core {
+  background-color: rgb(12 12 14 / 0.82);
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: calc(2rem - 0.375rem);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.15);
 }
 
 @utility label-mono {
@@ -150,14 +160,52 @@
   font-size: 0.6875rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #787774;
+  color: #a1a1aa;
 }
 
 @utility grid-backdrop {
   background-image:
-    linear-gradient(to right, rgb(0 0 0 / 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(0 0 0 / 0.045) 1px, transparent 1px);
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
   background-size: 56px 56px;
+}
+
+/* Cinematic entry: heavy fade-up with deblur over 800ms. */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(4rem); filter: blur(12px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@utility animate-reveal {
+  animation: reveal-up 800ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@utility card-lift {
+  transition:
+    border-color 700ms cubic-bezier(0.32, 0.72, 0, 1),
+    transform 700ms cubic-bezier(0.32, 0.72, 0, 1),
+    box-shadow 700ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Shared fluid transition for buttons, chips, list rows. */
+@utility ui-interactive {
+  transition:
+    color var(--dur-fast) cubic-bezier(0.32, 0.72, 0, 1),
+    background-color var(--dur-fast) cubic-bezier(0.32, 0.72, 0, 1),
+    border-color var(--dur-fast) cubic-bezier(0.32, 0.72, 0, 1),
+    opacity var(--dur-fast) cubic-bezier(0.32, 0.72, 0, 1),
+    transform var(--dur-fast) cubic-bezier(0.32, 0.72, 0, 1),
+    box-shadow var(--dur-fast) cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Crossfade for swapped microcopy (narration, feedback, turn content). */
+@keyframes ui-fade-swap {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-fade-swap {
+  animation: ui-fade-swap var(--dur-fast) cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
 @keyframes pulse-ring {
@@ -175,43 +223,7 @@
 }
 
 @utility animate-pulse-ring {
-  animation: pulse-ring 2.2s ease-out infinite;
-}
-
-/* Quiet scroll entry: fade + 12px rise over 600ms, expo-out. */
-@keyframes reveal-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@utility animate-reveal {
-  animation: reveal-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* Flat cards: no lift, no glow — hover is a hairline shift only. */
-@utility card-lift {
-  transition: border-color 200ms ease;
-}
-
-/* Shared interactive transition for buttons, chips, list rows (150–300ms). */
-@utility ui-interactive {
-  transition:
-    color var(--dur-fast) ease,
-    background-color var(--dur-fast) ease,
-    border-color var(--dur-fast) ease,
-    opacity var(--dur-fast) ease,
-    transform var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-fast) ease;
-}
-
-/* Crossfade for swapped microcopy (narration, feedback, turn content). */
-@keyframes ui-fade-swap {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@utility animate-fade-swap {
-  animation: ui-fade-swap var(--dur-fast) var(--ease-out) both;
+  animation: pulse-ring 2.2s cubic-bezier(0.32, 0.72, 0, 1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -226,27 +238,26 @@
 
 /* Visible keyboard focus everywhere: the studio is full of small controls. */
 :where(a, button, input, [tabindex]):focus-visible {
-  outline: 2px solid #111111;
+  outline: 2px solid #10b981;
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Browser surfaces carry the warm monochrome world too. */
 ::selection {
-  background: #111111;
-  color: #ffffff;
+  background: #10b981;
+  color: #04120c;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #eaeaea transparent;
+  scrollbar-color: rgb(255 255 255 / 0.16) transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #eaeaea;
+  background: rgb(255 255 255 / 0.16);
   border-radius: 8px;
 }
 *::-webkit-scrollbar-track {

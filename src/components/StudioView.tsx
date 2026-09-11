@@ -212,26 +212,26 @@ export function StudioView({ scene }: { scene: SceneModule }) {
   const narration = controller.state.narration;
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#FBFBFA]">
-      <header className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-2 border-b border-[#EAEAEA] bg-[#FBFBFA] px-6 py-3">
+    <div className="flex min-h-[100dvh] flex-col bg-[#050505] text-zinc-100 lg:h-screen lg:overflow-hidden">
+      <header className="flex max-h-20 shrink-0 flex-wrap items-center gap-x-6 gap-y-2 overflow-hidden border-b border-white/10 bg-black/60 px-4 py-3 backdrop-blur-2xl sm:px-6">
         <div className="flex min-w-0 items-center gap-4">
           <Link
             to="/"
-            className="ui-interactive inline-flex shrink-0 cursor-pointer items-center gap-1.5 px-1 py-1.5 text-sm text-[#787774] hover:text-[#111111]"
+            className="ui-interactive inline-flex shrink-0 cursor-pointer items-center gap-1.5 px-1 py-1.5 text-sm text-zinc-400 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:text-white"
             aria-label="Back to module library"
           >
             <IconBack className="h-4 w-4" />
             <span className="hidden sm:inline">Library</span>
           </Link>
-          <div className="h-6 w-px shrink-0 bg-[#EAEAEA]" aria-hidden />
+          <div className="h-6 w-px shrink-0 bg-white/10" aria-hidden />
           <div className="min-w-0">
-            <h1 className="truncate font-display text-xl font-semibold tracking-tight">{scene.title}</h1>
-            <p className="truncate font-mono text-xs text-[#787774]">
-              {scene.subject} · {scene.level}
+            <h1 className="truncate font-display text-xl font-semibold tracking-tight text-zinc-100">{scene.title}</h1>
+            <p className="truncate font-mono text-xs text-zinc-500">
+              {scene.subject} Level {scene.level}
             </p>
           </div>
         </div>
-        {/* Explore → Ask → Challenge → Master is one workflow, not four pages. */}
+        {/* Explore, Ask, Challenge, Master is one workflow, not four pages. */}
         <nav
           aria-label="Learning modes"
           className="order-3 flex w-full shrink-0 items-center gap-1 sm:order-none sm:w-auto"
@@ -249,10 +249,9 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             onClick={() => setDrawer((d) => !d)}
             aria-expanded={drawer}
             aria-label={drawer ? "Close structures panel" : "Open structures and challenges panel"}
-            className={`ui-interactive inline-flex min-h-[36px] min-w-[36px] cursor-pointer items-center justify-center gap-1.5 border border-[#EAEAEA] bg-white px-2.5 py-1.5 text-xs text-[#2F3437] hover:text-[#111111] lg:hidden ${
-              drawer ? "font-semibold text-[#111111]" : ""
+            className={`ui-interactive inline-flex min-h-[36px] min-w-[36px] cursor-pointer items-center justify-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs text-zinc-300 backdrop-blur-2xl transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/10 hover:text-white lg:hidden ${
+              drawer ? "font-semibold text-white" : ""
             }`}
-            style={{ borderRadius: 6 }}
           >
             <IconLayers className="h-3.5 w-3.5" />{" "}
             <span className="hidden sm:inline">Structures</span>
@@ -261,10 +260,9 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             onClick={() => setAutoRotate((v) => !v)}
             aria-pressed={autoRotate}
             title="Slowly orbit the camera"
-            className={`ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-[#EAEAEA] bg-white px-2.5 py-1.5 text-xs text-[#2F3437] hover:text-[#111111] ${
-              autoRotate ? "font-semibold text-[#111111]" : ""
+            className={`ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs text-zinc-300 backdrop-blur-2xl transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/10 hover:text-white active:scale-[0.98] ${
+              autoRotate ? "font-semibold text-white" : ""
             }`}
-            style={{ borderRadius: 6 }}
           >
             <IconOrbit className="h-3.5 w-3.5" />{" "}
             <span className="hidden sm:inline">Orbit</span>
@@ -276,8 +274,7 @@ export function StudioView({ scene }: { scene: SceneModule }) {
               controller.dispatch({ type: "resetScene" });
             }}
             title="Restore the default camera and visibility"
-            className="ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-[#EAEAEA] bg-white px-2.5 py-1.5 text-xs text-[#2F3437] hover:text-[#111111]"
-            style={{ borderRadius: 6 }}
+            className="ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs text-zinc-300 backdrop-blur-2xl transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/10 hover:text-white active:scale-[0.98]"
           >
             <IconReset className="h-3.5 w-3.5" />{" "}
             <span className="hidden sm:inline">Reset view</span>
@@ -285,13 +282,17 @@ export function StudioView({ scene }: { scene: SceneModule }) {
         </div>
       </header>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 overflow-y-auto p-6 lg:grid-cols-[264px_minmax(0,1fr)_360px] lg:overflow-hidden">
+      <div className="grid min-h-0 w-full flex-1 grid-cols-1 gap-6 overflow-y-auto px-4 py-6 sm:px-6 lg:grid-cols-[280px_minmax(0,1fr)_380px] lg:overflow-hidden lg:py-8">
         {/* Structure index */}
         <aside
           aria-label="Structure index and challenges"
-          className="order-2 hidden min-h-0 flex-col overflow-hidden border border-[#EAEAEA] bg-white lg:order-1 lg:flex"
-          style={{ borderRadius: 8 }}
+          className="order-2 hidden min-h-0 flex-col overflow-hidden border border-white/10 bg-white/5 p-1.5 shadow-[0_30px_80px_rgb(0_0_0/0.55)] backdrop-blur-2xl lg:order-1 lg:flex"
+          style={{ borderRadius: "2rem" }}
         >
+          <div
+            className="flex min-h-0 flex-1 flex-col overflow-hidden border border-white/10 bg-[#0c0c0e]/90 shadow-[inset_0_1px_1px_rgb(255_255_255/0.15)]"
+            style={{ borderRadius: "calc(2rem - 0.375rem)" }}
+          >
           <IndexPanel
             scene={scene}
             activeId={activeId}
@@ -302,13 +303,14 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             onToggleOption={onToggleOption}
             onStartChallenge={startChallenge}
           />
+          </div>
         </aside>
 
         {/* Viewport */}
         <section
           aria-label={`${scene.title} 3D viewport`}
-          className="relative order-1 min-h-[52vh] overflow-hidden border border-[#EAEAEA] bg-[#101828] sm:min-h-[48vh] lg:order-2 lg:min-h-0"
-          style={{ borderRadius: 8 }}
+          className="relative order-1 min-h-[52vh] overflow-hidden border border-white/10 bg-[#050505] shadow-[0_30px_80px_rgb(0_0_0/0.55)] sm:min-h-[48vh] lg:order-2 lg:min-h-0"
+          style={{ borderRadius: "2rem" }}
         >
           <SceneCanvas
             key={key}
@@ -323,12 +325,11 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             labels={controller.state.labels}
             emphasizeModels={MODEL_EMPHASIS_SCENES.has(scene.id)}
           />
-          <div className="pointer-events-none absolute left-4 top-4 max-w-xs bg-black/55 px-3 py-2"
-          style={{ borderRadius: 8 }}>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/85">
+          <div className="pointer-events-none absolute left-4 top-4 max-w-xs rounded-full border border-white/10 bg-black/60 px-4 py-2 backdrop-blur-2xl">
+            <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-emerald-300">
               {scene.accentLabel} module
             </p>
-            <p className="mt-0.5 text-xs text-white/70">{scene.tagline}</p>
+            <p className="mt-0.5 text-xs text-zinc-300">{scene.tagline}</p>
           </div>
            {mode === "challenge" && challenge ? (
             <ChallengeBar
@@ -352,8 +353,7 @@ export function StudioView({ scene }: { scene: SceneModule }) {
               key={narration}
               role="status"
               aria-live="polite"
-              className="animate-fade-swap pointer-events-none absolute left-4 top-20 max-w-md bg-black/55 px-3 py-1.5 text-xs font-medium text-white"
-              style={{ borderRadius: 8 }}
+              className="animate-fade-swap pointer-events-none absolute left-4 top-24 max-w-md rounded-full border border-white/10 bg-black/60 px-4 py-1.5 text-xs font-medium text-zinc-100 backdrop-blur-2xl"
             >
               {narration}
             </p>
@@ -361,24 +361,23 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             {hotspot && mode !== "challenge" ? (
             <div
               key={hotspot.id}
-              className="animate-fade-swap pointer-events-none absolute bottom-4 left-4 right-4 max-w-md bg-black/60 p-4"
-              style={{ borderRadius: 8 }}
+              className="animate-fade-swap pointer-events-none absolute bottom-4 left-4 right-4 max-w-md border border-white/10 bg-black/60 p-5 backdrop-blur-2xl"
+              style={{ borderRadius: "calc(2rem - 0.75rem)" }}
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-emerald-300">
                 {hotspot.category}
               </p>
               <p className="mt-1 text-sm font-semibold text-white">{hotspot.name}</p>
-              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/80">
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-300">
                 {hotspot.summary}
               </p>
-              <p className="mt-1.5 hidden text-[11px] text-white/60 md:block">
+              <p className="mt-1.5 hidden text-[11px] text-zinc-400 md:block">
                 {hotspot.facts[0]}
               </p>
             </div>
            ) : mode !== "challenge" ? (
-            <p className="pointer-events-none absolute bottom-4 left-4 bg-black/55 px-2.5 py-1 text-xs text-white/80"
-              style={{ borderRadius: 6 }}>
-              Drag to orbit · scroll to zoom · click a marker to ask the tutor
+            <p className="pointer-events-none absolute bottom-4 left-4 rounded-full border border-white/10 bg-black/60 px-4 py-1.5 text-xs text-zinc-300 backdrop-blur-2xl">
+              Drag to orbit, scroll to zoom, click a marker to ask the tutor
             </p>
           ) : null}
         </section>
@@ -417,18 +416,18 @@ export function StudioView({ scene }: { scene: SceneModule }) {
       {/* Mobile drawer: same index content, rendered only below lg. */}
       {drawer ? (
         <div
-          className="fixed inset-0 z-50 lg:hidden"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-3xl lg:hidden"
           role="dialog"
           aria-label="Structures and challenges"
         >
           <button
             aria-label="Close structures panel"
             onClick={() => setDrawer(false)}
-            className="absolute inset-0 bg-white/70"
+            className="absolute inset-0"
           />
           <div
-            className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto border-t border-[#EAEAEA] bg-white p-2"
-            style={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}
+            className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto border-t border-white/10 bg-[#0c0c0e] p-4"
+            style={{ borderTopLeftRadius: "2rem", borderTopRightRadius: "2rem" }}
           >
             <IndexPanel
               scene={scene}
@@ -468,8 +467,8 @@ function IndexPanel({
 }) {
   return (
     <>
-      <h2 className="flex items-center gap-2 px-6 pt-6 pb-2 text-sm font-semibold">
-        <IconLayers className="h-4 w-4" />
+      <h2 className="flex items-center gap-2 px-6 pt-6 pb-2 text-sm font-semibold text-zinc-100">
+        <IconLayers className="h-4 w-4 text-emerald-300" />
         Structures
       </h2>
       <ul className="min-h-0 flex-1 overflow-y-auto px-3 pb-2">
@@ -480,15 +479,15 @@ function IndexPanel({
               <button
                 onClick={() => onPick(h.id)}
                 aria-current={selected ? "true" : undefined}
-                title={`${h.name} · ${h.category}. ${mode === "challenge" ? "Submit as challenge answer" : "Focus and ask the tutor"}`}
-                className={`ui-interactive w-full cursor-pointer border-l-2 px-3 py-2 text-left ${
+                title={`${h.name}, ${h.category}. ${mode === "challenge" ? "Submit as challenge answer" : "Focus and ask the tutor"}`}
+                className={`ui-interactive w-full cursor-pointer border-l-2 px-3 py-2 text-left transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
                   selected
-                    ? "border-[#111111] font-semibold text-[#111111]"
-                    : "border-transparent text-[#2F3437] hover:text-[#111111]"
+                    ? "border-emerald-300 font-semibold text-white"
+                    : "border-transparent text-zinc-400 hover:text-white"
                 }`}
               >
                 <span className="flex items-baseline gap-3">
-                  <span className="font-mono text-[11px] text-[#787774] tabular-nums">
+                  <span className="font-mono text-[11px] text-zinc-500 tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="text-sm">{h.name}</span>
@@ -498,13 +497,13 @@ function IndexPanel({
           );
         })}
       </ul>
-      <div className="border-t border-[#EAEAEA] px-6 py-6">
-        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold">
-          <IconSwords className="h-4 w-4" />
+      <div className="border-t border-white/10 px-6 py-6">
+        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-zinc-100">
+          <IconSwords className="h-4 w-4 text-emerald-300" />
           Challenges
         </h2>
         {sceneChallenges.length === 0 ? (
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-zinc-500">
             No challenges authored for this scene yet.
           </p>
         ) : (
@@ -514,11 +513,11 @@ function IndexPanel({
                 <button
                   onClick={() => onStartChallenge(c)}
                   title={`Start challenge: ${c.prompt}`}
-                  className="ui-interactive w-full cursor-pointer border border-[#EAEAEA] bg-white px-3 py-2.5 text-left hover:border-[#111111]"
-                  style={{ borderRadius: 8 }}
+                  className="ui-interactive w-full cursor-pointer border border-white/10 bg-white/5 px-3 py-2.5 text-left backdrop-blur-2xl transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-emerald-300/50 active:scale-[0.98]"
+                  style={{ borderRadius: "calc(2rem - 0.75rem)" }}
                 >
-                  <span className="line-clamp-2 text-sm leading-relaxed text-[#2F3437]">{c.prompt}</span>
-                  <span className="mt-1.5 inline-block bg-[#EDF3EC] px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.05em] text-[#346538]" style={{ borderRadius: 9999 }}>
+                  <span className="line-clamp-2 text-sm leading-relaxed text-zinc-200">{c.prompt}</span>
+                  <span className="mt-1.5 inline-block rounded-full bg-emerald-400/10 px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.05em] text-emerald-300">
                     Level {c.difficulty}
                   </span>
                 </button>
@@ -528,20 +527,20 @@ function IndexPanel({
         )}
       </div>
       {(SCENE_TOGGLES[scene.id] ?? []).length > 0 ? (
-        <div className="border-t border-[#EAEAEA] px-6 py-6">
-          <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
+        <div className="border-t border-white/10 px-6 py-6">
+          <h2 className="mb-3 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-500">
             Render options
           </h2>
           {(SCENE_TOGGLES[scene.id] ?? []).map((t) => (
             <label
               key={t.key}
-              className="ui-interactive mb-1 flex cursor-pointer items-center gap-2 px-1 py-0.5 text-xs text-[#787774] hover:text-[#111111]"
+              className="ui-interactive mb-1 flex cursor-pointer items-center gap-2 px-1 py-0.5 text-xs text-zinc-400 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:text-white"
             >
               <input
                 type="checkbox"
                 checked={options[t.key] ?? false}
                 onChange={(e) => onToggleOption(t.key, e.target.checked)}
-                className="h-4 w-4 shrink-0 cursor-pointer accent-[var(--primary)]"
+                className="h-4 w-4 shrink-0 cursor-pointer accent-[#10b981]"
               />
               {t.label}
             </label>
@@ -583,10 +582,10 @@ const ModeTabs = memo(function ModeTabs({
             disabled={disabled}
             aria-current={active ? "page" : undefined}
             title={m.hint}
-            className={`ui-interactive border-b-2 px-0.5 py-1.5 text-sm ${
+            className={`ui-interactive border-b-2 px-0.5 py-1.5 text-sm transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
               active
-                ? "border-[#111111] font-semibold text-[#111111]"
-                : "border-transparent text-[#787774] hover:text-[#111111]"
+                ? "border-emerald-300 font-semibold text-white"
+                : "border-transparent text-zinc-500 hover:text-white"
             } ${disabled ? "cursor-not-allowed opacity-40" : "cursor-pointer"}`}
           >
             {m.label}
