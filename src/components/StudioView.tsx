@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, Layers, Orbit, RotateCcw, Swords } from "lucide-react";
+import { IconBack, IconLayers, IconOrbit, IconReset, IconSwords } from "@/components/icons";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { ChallengeBar, type ChallengeOutcome } from "./ChallengeBar";
@@ -212,21 +212,21 @@ export function StudioView({ scene }: { scene: SceneModule }) {
   const narration = controller.state.narration;
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
-      <header className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-border/70 bg-background/90 px-4 py-2.5 backdrop-blur md:px-6">
-        <div className="flex min-w-0 items-center gap-3">
+    <div className="flex h-screen flex-col overflow-hidden bg-[#FBFBFA]">
+      <header className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-2 border-b border-[#EAEAEA] bg-[#FBFBFA] px-6 py-3">
+        <div className="flex min-w-0 items-center gap-4">
           <Link
             to="/"
-            className="ui-interactive inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-md px-1 py-1.5 text-sm text-muted-foreground hover:text-primary"
+            className="ui-interactive inline-flex shrink-0 cursor-pointer items-center gap-1.5 px-1 py-1.5 text-sm text-[#787774] hover:text-[#111111]"
             aria-label="Back to module library"
           >
-            <ArrowLeft className="h-4 w-4" aria-hidden />
+            <IconBack className="h-4 w-4" />
             <span className="hidden sm:inline">Library</span>
           </Link>
-          <div className="h-6 w-px shrink-0 bg-border" aria-hidden />
+          <div className="h-6 w-px shrink-0 bg-[#EAEAEA]" aria-hidden />
           <div className="min-w-0">
-            <h1 className="truncate text-base font-semibold md:text-lg">{scene.title}</h1>
-            <p className="truncate text-xs text-muted-foreground">
+            <h1 className="truncate font-display text-xl font-semibold tracking-tight">{scene.title}</h1>
+            <p className="truncate font-mono text-xs text-[#787774]">
               {scene.subject} · {scene.level}
             </p>
           </div>
@@ -249,26 +249,24 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             onClick={() => setDrawer((d) => !d)}
             aria-expanded={drawer}
             aria-label={drawer ? "Close structures panel" : "Open structures and challenges panel"}
-            className={`ui-interactive inline-flex min-h-[36px] min-w-[36px] cursor-pointer items-center justify-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs lg:hidden ${
-              drawer
-                ? "border-primary/60 bg-primary/10 font-semibold text-primary"
-                : "border-border text-muted-foreground hover:text-foreground"
+            className={`ui-interactive inline-flex min-h-[36px] min-w-[36px] cursor-pointer items-center justify-center gap-1.5 border border-[#EAEAEA] bg-white px-2.5 py-1.5 text-xs text-[#2F3437] hover:text-[#111111] lg:hidden ${
+              drawer ? "font-semibold text-[#111111]" : ""
             }`}
+            style={{ borderRadius: 6 }}
           >
-            <Layers className="h-3.5 w-3.5" aria-hidden />{" "}
+            <IconLayers className="h-3.5 w-3.5" />{" "}
             <span className="hidden sm:inline">Structures</span>
           </button>
           <button
             onClick={() => setAutoRotate((v) => !v)}
             aria-pressed={autoRotate}
             title="Slowly orbit the camera"
-            className={`ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs ${
-              autoRotate
-                ? "border-primary/60 bg-primary/10 font-semibold text-primary"
-                : "border-border text-muted-foreground hover:text-foreground"
+            className={`ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-[#EAEAEA] bg-white px-2.5 py-1.5 text-xs text-[#2F3437] hover:text-[#111111] ${
+              autoRotate ? "font-semibold text-[#111111]" : ""
             }`}
+            style={{ borderRadius: 6 }}
           >
-            <Orbit className="h-3.5 w-3.5" aria-hidden />{" "}
+            <IconOrbit className="h-3.5 w-3.5" />{" "}
             <span className="hidden sm:inline">Orbit</span>
           </button>
           <button
@@ -278,19 +276,21 @@ export function StudioView({ scene }: { scene: SceneModule }) {
               controller.dispatch({ type: "resetScene" });
             }}
             title="Restore the default camera and visibility"
-            className="ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+            className="ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 border border-[#EAEAEA] bg-white px-2.5 py-1.5 text-xs text-[#2F3437] hover:text-[#111111]"
+            style={{ borderRadius: 6 }}
           >
-            <RotateCcw className="h-3.5 w-3.5" aria-hidden />{" "}
+            <IconReset className="h-3.5 w-3.5" />{" "}
             <span className="hidden sm:inline">Reset view</span>
           </button>
         </div>
       </header>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 overflow-y-auto p-3 lg:grid-cols-[264px_minmax(0,1fr)_360px] lg:overflow-hidden md:p-4">
+      <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 overflow-y-auto p-6 lg:grid-cols-[264px_minmax(0,1fr)_360px] lg:overflow-hidden">
         {/* Structure index */}
         <aside
           aria-label="Structure index and challenges"
-          className="order-2 hidden min-h-0 flex-col overflow-hidden rounded-xl border border-border/70 bg-surface/60 lg:order-1 lg:flex"
+          className="order-2 hidden min-h-0 flex-col overflow-hidden border border-[#EAEAEA] bg-white lg:order-1 lg:flex"
+          style={{ borderRadius: 8 }}
         >
           <IndexPanel
             scene={scene}
@@ -307,7 +307,8 @@ export function StudioView({ scene }: { scene: SceneModule }) {
         {/* Viewport */}
         <section
           aria-label={`${scene.title} 3D viewport`}
-          className="relative order-1 min-h-[52vh] overflow-hidden rounded-xl border border-border/70 bg-[#101828] sm:min-h-[48vh] lg:order-2 lg:min-h-0"
+          className="relative order-1 min-h-[52vh] overflow-hidden border border-[#EAEAEA] bg-[#101828] sm:min-h-[48vh] lg:order-2 lg:min-h-0"
+          style={{ borderRadius: 8 }}
         >
           <SceneCanvas
             key={key}
@@ -322,7 +323,8 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             labels={controller.state.labels}
             emphasizeModels={MODEL_EMPHASIS_SCENES.has(scene.id)}
           />
-          <div className="pointer-events-none absolute left-4 top-4 max-w-xs rounded-lg bg-black/55 px-3 py-2 backdrop-blur-sm">
+          <div className="pointer-events-none absolute left-4 top-4 max-w-xs bg-black/55 px-3 py-2"
+          style={{ borderRadius: 8 }}>
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/85">
               {scene.accentLabel} module
             </p>
@@ -350,7 +352,8 @@ export function StudioView({ scene }: { scene: SceneModule }) {
               key={narration}
               role="status"
               aria-live="polite"
-              className="animate-fade-swap pointer-events-none absolute left-4 top-20 max-w-md rounded-lg bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm"
+              className="animate-fade-swap pointer-events-none absolute left-4 top-20 max-w-md bg-black/55 px-3 py-1.5 text-xs font-medium text-white"
+              style={{ borderRadius: 8 }}
             >
               {narration}
             </p>
@@ -358,7 +361,8 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             {hotspot && mode !== "challenge" ? (
             <div
               key={hotspot.id}
-              className="animate-fade-swap pointer-events-none absolute bottom-4 left-4 right-4 max-w-md rounded-lg bg-black/60 p-3 backdrop-blur-sm"
+              className="animate-fade-swap pointer-events-none absolute bottom-4 left-4 right-4 max-w-md bg-black/60 p-4"
+              style={{ borderRadius: 8 }}
             >
               <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">
                 {hotspot.category}
@@ -372,7 +376,8 @@ export function StudioView({ scene }: { scene: SceneModule }) {
               </p>
             </div>
            ) : mode !== "challenge" ? (
-            <p className="pointer-events-none absolute bottom-4 left-4 rounded-md bg-black/55 px-2.5 py-1 text-xs text-white/80 backdrop-blur-sm">
+            <p className="pointer-events-none absolute bottom-4 left-4 bg-black/55 px-2.5 py-1 text-xs text-white/80"
+              style={{ borderRadius: 6 }}>
               Drag to orbit · scroll to zoom · click a marker to ask the tutor
             </p>
           ) : null}
@@ -419,9 +424,12 @@ export function StudioView({ scene }: { scene: SceneModule }) {
           <button
             aria-label="Close structures panel"
             onClick={() => setDrawer(false)}
-            className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-white/70"
           />
-          <div className="panel absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto p-2">
+          <div
+            className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto border-t border-[#EAEAEA] bg-white p-2"
+            style={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}
+          >
             <IndexPanel
               scene={scene}
               activeId={activeId}
@@ -460,11 +468,11 @@ function IndexPanel({
 }) {
   return (
     <>
-      <h2 className="flex items-center gap-2 px-4 pt-3 pb-1 text-sm font-semibold">
-        <Layers className="h-4 w-4 text-primary" aria-hidden />
+      <h2 className="flex items-center gap-2 px-6 pt-6 pb-2 text-sm font-semibold">
+        <IconLayers className="h-4 w-4" />
         Structures
       </h2>
-      <ul className="min-h-0 flex-1 space-y-0.5 overflow-y-auto px-2 pb-2">
+      <ul className="min-h-0 flex-1 overflow-y-auto px-3 pb-2">
         {scene.hotspots.map((h, i) => {
           const selected = activeId === h.id && mode !== "challenge";
           return (
@@ -473,14 +481,14 @@ function IndexPanel({
                 onClick={() => onPick(h.id)}
                 aria-current={selected ? "true" : undefined}
                 title={`${h.name} · ${h.category}. ${mode === "challenge" ? "Submit as challenge answer" : "Focus and ask the tutor"}`}
-                className={`ui-interactive w-full cursor-pointer rounded-md px-2.5 py-2 text-left ${
+                className={`ui-interactive w-full cursor-pointer border-l-2 px-3 py-2 text-left ${
                   selected
-                    ? "bg-primary/10 font-semibold text-primary"
-                    : "text-foreground/85 hover:bg-secondary/70"
+                    ? "border-[#111111] font-semibold text-[#111111]"
+                    : "border-transparent text-[#2F3437] hover:text-[#111111]"
                 }`}
               >
-                <span className="flex items-baseline gap-2">
-                  <span className="text-[11px] text-muted-foreground tabular-nums">
+                <span className="flex items-baseline gap-3">
+                  <span className="font-mono text-[11px] text-[#787774] tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="text-sm">{h.name}</span>
@@ -490,9 +498,9 @@ function IndexPanel({
           );
         })}
       </ul>
-      <div className="border-t border-border/70 px-4 py-3">
-        <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold">
-          <Swords className="h-3.5 w-3.5 text-primary" aria-hidden />
+      <div className="border-t border-[#EAEAEA] px-6 py-6">
+        <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold">
+          <IconSwords className="h-4 w-4" />
           Challenges
         </h2>
         {sceneChallenges.length === 0 ? (
@@ -500,16 +508,17 @@ function IndexPanel({
             No challenges authored for this scene yet.
           </p>
         ) : (
-          <ul className="space-y-0.5">
+          <ul className="space-y-2">
             {sceneChallenges.map((c) => (
               <li key={c.id}>
                 <button
                   onClick={() => onStartChallenge(c)}
                   title={`Start challenge: ${c.prompt}`}
-                  className="ui-interactive w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary/60 hover:text-primary"
+                  className="ui-interactive w-full cursor-pointer border border-[#EAEAEA] bg-white px-3 py-2.5 text-left hover:border-[#111111]"
+                  style={{ borderRadius: 8 }}
                 >
-                  <span className="line-clamp-2">{c.prompt}</span>
-                  <span className="mt-0.5 block text-[11px] text-muted-foreground/80">
+                  <span className="line-clamp-2 text-sm leading-relaxed text-[#2F3437]">{c.prompt}</span>
+                  <span className="mt-1.5 inline-block bg-[#EDF3EC] px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.05em] text-[#346538]" style={{ borderRadius: 9999 }}>
                     Level {c.difficulty}
                   </span>
                 </button>
@@ -519,14 +528,14 @@ function IndexPanel({
         )}
       </div>
       {(SCENE_TOGGLES[scene.id] ?? []).length > 0 ? (
-        <div className="border-t border-border/70 px-4 py-3">
-          <h2 className="mb-2 text-xs font-semibold text-muted-foreground">
+        <div className="border-t border-[#EAEAEA] px-6 py-6">
+          <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
             Render options
           </h2>
           {(SCENE_TOGGLES[scene.id] ?? []).map((t) => (
             <label
               key={t.key}
-              className="ui-interactive mb-1 flex cursor-pointer items-center gap-2 rounded-md px-1 py-0.5 text-xs text-muted-foreground hover:text-foreground"
+              className="ui-interactive mb-1 flex cursor-pointer items-center gap-2 px-1 py-0.5 text-xs text-[#787774] hover:text-[#111111]"
             >
               <input
                 type="checkbox"
@@ -563,11 +572,7 @@ const ModeTabs = memo(function ModeTabs({
   hasChallenge: boolean;
 }) {
   return (
-    <div
-      role="group"
-      aria-label="Learning modes"
-      className="flex items-center gap-0.5 rounded-lg border border-border/70 bg-secondary/50 p-0.5"
-    >
+    <div role="group" aria-label="Learning modes" className="flex items-center gap-5">
       {MODES.map((m) => {
         const active = mode === m.id;
         const disabled = m.id === "challenge" && !hasChallenge;
@@ -578,10 +583,10 @@ const ModeTabs = memo(function ModeTabs({
             disabled={disabled}
             aria-current={active ? "page" : undefined}
             title={m.hint}
-            className={`ui-interactive rounded-md px-2.5 py-1.5 text-xs font-medium sm:px-3 ${
+            className={`ui-interactive border-b-2 px-0.5 py-1.5 text-sm ${
               active
-                ? "bg-surface font-semibold text-primary shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
+                ? "border-[#111111] font-semibold text-[#111111]"
+                : "border-transparent text-[#787774] hover:text-[#111111]"
             } ${disabled ? "cursor-not-allowed opacity-40" : "cursor-pointer"}`}
           >
             {m.label}

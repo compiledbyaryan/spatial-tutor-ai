@@ -5,9 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * SPATIA design system — ui-ux-pro-max "SPATIA" system (skill overrides AGENTS.md here).
- * Light learning indigo + progress green. Baloo 2 display / Comic Neue body.
- * All colors are semantic tokens. Never hardcode colors in components.
+ * SPATIA design system — minimalist-ui protocol (skill overrides prior themes here).
+ * Warm monochrome canvas, ink CTA, Newsreader serif display, system sans UI,
+ * JetBrains Mono for data only. Flat surfaces, hairline borders, no glow.
  */
 
 @theme inline {
@@ -17,9 +17,9 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
-  --font-display: "Baloo 2", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Comic Neue", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Newsreader", "Instrument Serif", Georgia, serif;
+  --font-sans: "Archivo", "SF Pro Display", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Geist Mono", "SF Mono", "JetBrains Mono", ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -40,8 +40,11 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-ink: var(--ink);
   --color-caution: var(--caution);
   --color-caution-foreground: var(--caution-foreground);
+  --color-good: var(--good);
+  --color-good-foreground: var(--good-foreground);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   --color-grid: var(--grid);
@@ -53,57 +56,58 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.375rem;
 
-  --background: #eef2ff;
-  --foreground: #312e81;
+  --background: #fbfbfa;
+  --foreground: #111111;
 
   --surface: #ffffff;
-  --surface-raised: #f5f7ff;
+  --surface-raised: #f9f9f8;
 
   --card: #ffffff;
-  --card-foreground: #312e81;
+  --card-foreground: #111111;
   --popover: #ffffff;
-  --popover-foreground: #312e81;
+  --popover-foreground: #111111;
 
-  --primary: #4f46e5;
+  --primary: #111111;
   --primary-foreground: #ffffff;
-  --primary-glow: #818cf8;
 
-  --secondary: #e3e8fd;
-  --secondary-foreground: #312e81;
+  --secondary: #f7f6f3;
+  --secondary-foreground: #111111;
 
-  --muted: #e7ebfb;
-  --muted-foreground: #475569;
+  --muted: #f7f6f3;
+  --muted-foreground: #787774;
 
-  --accent: #15803d;
-  --accent-foreground: #ffffff;
+  /* Ink: sole saturated action color (reserved for primary CTA + send). */
+  --ink: #111111;
+  /* Spot pastels — semantic meaning only, always paired with dark text. */
+  --accent: #e1f3fe;
+  --accent-foreground: #1f6c9f;
 
-  --destructive: #dc2626;
+  --destructive: #9f2f2d;
   --destructive-foreground: #ffffff;
 
-  /* Caution (hint / retry feedback): amber ink readable on light surfaces. */
-  --caution: #92400e;
-  --caution-foreground: #ffffff;
+  /* Caution (hint / retry feedback): pale yellow wash + dark text. */
+  --caution: #fbf3db;
+  --caution-foreground: #956400;
+  /* Good (success feedback): pale green wash + dark text. */
+  --good: #edf3ec;
+  --good-foreground: #346538;
 
-  --border: #c9d3f2;
-  --input: #c9d3f2;
-  --ring: #4f46e5;
-  --grid: #b9c4ec;
+  --border: #eaeaea;
+  --input: #eaeaea;
+  --ring: #111111;
+  --grid: #eaeaea;
 
-  --chart-1: #4f46e5;
-  --chart-2: #16a34a;
-  --chart-3: #b45309;
-  --chart-4: #0d9488;
-  --chart-5: #7c3aed;
+  --chart-1: #2f3437;
+  --chart-2: #346538;
+  --chart-3: #956400;
+  --chart-4: #1f6c9f;
+  --chart-5: #9f2f2d;
 
-  --gradient-deep: linear-gradient(180deg, #eef2ff 0%, #e2e8fb 55%, #d7e0f8 100%);
-  --gradient-instrument: linear-gradient(135deg, var(--primary) 0%, var(--primary-glow) 100%);
-  --gradient-focus: linear-gradient(135deg, var(--accent) 0%, #4ade80 100%);
-  --shadow-panel: 0 18px 44px -24px rgb(49 46 129 / 0.28);
-  --shadow-glow: 0 0 0 1px rgb(79 70 229 / 0.28),
-    0 12px 40px -12px rgb(79 70 229 / 0.35);
-  --shadow-overlay: 0 20px 48px -16px rgb(49 46 129 / 0.35);
+  /* Flat surfaces — depth comes from hairlines, never shadows. */
+  --shadow-panel: 0 0 0 rgb(0 0 0 / 0);
+  --shadow-overlay: 0 2px 8px rgb(0 0 0 / 0.04);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
@@ -119,10 +123,9 @@
 
   body {
     background-color: var(--color-background);
-    background-image: var(--gradient-deep);
-    background-attachment: fixed;
-    color: var(--color-foreground);
+    color: #111111;
     font-family: var(--font-sans);
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -132,21 +135,14 @@
   h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+    line-height: 1.1;
   }
 }
 
 @utility panel {
-  background-color: rgb(255 255 255 / 0.88);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-panel);
-  backdrop-filter: blur(14px);
-}
-
-@utility text-gradient-instrument {
-  background-image: linear-gradient(135deg, var(--primary) 0%, #3730a3 100%);
-  background-clip: text;
-  color: transparent;
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
 }
 
 @utility label-mono {
@@ -154,13 +150,13 @@
   font-size: 0.6875rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--muted-foreground);
+  color: #787774;
 }
 
 @utility grid-backdrop {
   background-image:
-    linear-gradient(to right, rgb(79 70 229 / 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(79 70 229 / 0.1) 1px, transparent 1px);
+    linear-gradient(to right, rgb(0 0 0 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.045) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 
@@ -182,22 +178,19 @@
   animation: pulse-ring 2.2s ease-out infinite;
 }
 
-/* Crossfade for swapped microcopy (narration, feedback, turn content). */
-
+/* Quiet scroll entry: fade + 12px rise over 600ms, expo-out. */
 @keyframes reveal-up {
-  from { opacity: 0; transform: translateY(22px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @utility animate-reveal {
-  animation: reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: reveal-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Flat cards: no lift, no glow — hover is a hairline shift only. */
 @utility card-lift {
-  transition:
-    transform var(--dur-lift) var(--ease-out),
-    box-shadow var(--dur-lift) ease,
-    border-color var(--dur-lift) ease;
+  transition: border-color 200ms ease;
 }
 
 /* Shared interactive transition for buttons, chips, list rows (150–300ms). */
@@ -233,27 +226,27 @@
 
 /* Visible keyboard focus everywhere: the studio is full of small controls. */
 :where(a, button, input, [tabindex]):focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid #111111;
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Browser surfaces carry the light learning world too. */
+/* Browser surfaces carry the warm monochrome world too. */
 ::selection {
-  background: rgb(79 70 229 / 0.22);
-  color: var(--foreground);
+  background: #111111;
+  color: #ffffff;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: #eaeaea transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: #eaeaea;
   border-radius: 8px;
 }
 *::-webkit-scrollbar-track {

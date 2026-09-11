@@ -73,16 +73,19 @@ export function Hotspot3D({
       {showLabel ? (
         <Html center distanceFactor={12} style={{ pointerEvents: "none" }}>
           <div
-            className={`whitespace-nowrap rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-widest uppercase transition-opacity ${
+            className={`whitespace-nowrap border px-2 py-1 text-[11px] transition-opacity ${
               active
-                ? "border-primary bg-primary text-primary-foreground opacity-100"
+                ? "border-[#111111] bg-[#111111] font-semibold text-white opacity-100"
                 : hovered
-                  ? "border-primary/60 bg-white/95 text-primary opacity-100"
-                  : "border-slate-300 bg-white/90 text-slate-600 opacity-90"
+                  ? "border-[#111111] bg-white font-medium text-[#111111] opacity-100"
+                  : "border-[#EAEAEA] bg-white/95 text-[#2F3437] opacity-95"
             }`}
-            style={{ transform: "translateY(-2.2rem)" }}
+            style={{ transform: "translateY(-2.2rem)", borderRadius: 6 }}
           >
-            {String(index + 1).padStart(2, "0")} · {hotspot.name}
+            <span className="mr-1.5 font-mono text-[10px] text-[#787774] tabular-nums">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            {hotspot.name}
           </div>
         </Html>
       ) : null}

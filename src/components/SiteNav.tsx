@@ -1,12 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Boxes, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { IconBox, IconLogout } from "@/components/icons";
 import { supabase } from "@/integrations/supabase/client";
 
-const links = [
-  { to: "/explore/$sceneId", params: { sceneId: "cardiac" }, label: "3D Studio", icon: Boxes },
-] as const;
+const links = [{ to: "/explore/$sceneId", params: { sceneId: "cardiac" }, label: "3D Studio" }] as const;
 
 export function SiteNav() {
   const [email, setEmail] = useState<string | null>(null);
@@ -38,12 +36,9 @@ export function SiteNav() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
-      <nav aria-label="Primary" className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 md:px-6">
-        <Link
-          to="/"
-          className="ui-interactive rounded-md font-display text-base font-bold tracking-tight"
-        >
+    <header className="sticky top-0 z-40 border-b border-[#EAEAEA] bg-[#FBFBFA]">
+      <nav aria-label="Primary" className="mx-auto flex max-w-5xl items-center gap-4 px-6 py-3">
+        <Link to="/" className="ui-interactive font-display text-lg font-semibold tracking-tight">
           SPATIA
         </Link>
         <div className="ml-2 hidden flex-1 items-center gap-1 md:flex">
@@ -52,9 +47,9 @@ export function SiteNav() {
               key={l.label}
               to={l.to}
               params={l.params}
-              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
+              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 text-sm text-[#787774] hover:text-[#111111]"
             >
-              <l.icon className="h-3.5 w-3.5" />
+              <IconBox className="h-4 w-4" />
               {l.label}
             </Link>
           ))}
@@ -62,7 +57,9 @@ export function SiteNav() {
         <div className="ml-auto flex items-center gap-2">
           {email ? (
             <>
-              <span className="label-mono hidden max-w-[160px] truncate sm:block">{email}</span>
+              <span className="hidden max-w-[160px] truncate font-mono text-xs text-[#787774] sm:block">
+                {email}
+              </span>
               <button
                 onClick={async () => {
                   try {
@@ -71,15 +68,17 @@ export function SiteNav() {
                     setEmail(null);
                   }
                 }}
-                className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+                className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 border border-[#EAEAEA] bg-white px-3 py-1.5 text-xs text-[#2F3437] hover:text-[#111111]"
+                style={{ borderRadius: 6 }}
               >
-                <LogOut className="h-3.5 w-3.5" /> Sign out
+                <IconLogout className="h-4 w-4" /> Sign out
               </button>
             </>
           ) : (
             <Link
               to="/auth"
-              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90"
+              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 bg-[#111111] px-4 py-1.5 text-xs font-medium text-white hover:bg-[#333333]"
+              style={{ borderRadius: 6 }}
             >
               Sign in
             </Link>

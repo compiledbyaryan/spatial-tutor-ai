@@ -1,4 +1,4 @@
-import { CheckCircle2, Lightbulb, X, XCircle } from "lucide-react";
+import { IconBulb, IconCheck, IconClose, IconCross } from "@/components/icons";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { evaluateChallenge } from "@/lib/challenge-engine";
@@ -94,12 +94,6 @@ export function ChallengeBar({
       : expected.length > 1
         ? "Select " + expected.length + " structures"
         : "Select in the 3D model";
-  const border =
-    flash === "good"
-      ? "border-accent/70"
-      : flash === "bad"
-        ? "border-destructive/70"
-        : "border-border/70";
   const pickedNames = (ids: string[]) =>
     ids
       .map((id) => expected.find((candidate) => candidate === id) ?? id)
@@ -107,51 +101,51 @@ export function ChallengeBar({
       .map((name) => name.replace(/\b\w/g, (letter) => letter.toUpperCase()))
       .join(" → ");
   const feedbackTone =
-    flash === "bad" ? "border-caution/50 bg-caution/10" : "border-accent/50 bg-accent/10";
+    flash === "bad" ? "border-[#EAEAEA] bg-[#FBF3DB]" : "border-[#EAEAEA] bg-[#EDF3EC]";
 
   return (
     <div
       role="region"
       aria-label={"Challenge: " + challenge.prompt}
-      className={
-        "animate-fade-swap pointer-events-auto absolute left-4 right-4 top-4 rounded-lg border border-border/70 bg-surface/95 p-4 shadow-(--shadow-overlay) backdrop-blur-md md:left-auto md:right-4 md:w-[390px]"
-      }
+      className="animate-fade-swap pointer-events-auto absolute left-4 right-4 top-4 border border-[#EAEAEA] bg-white p-6 md:left-auto md:right-4 md:w-[390px]"
+      style={{ borderRadius: 8 }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="text-base font-semibold leading-snug">{title}</h2>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="font-mono text-xs uppercase tracking-[0.05em] text-[#787774]">
             {CHALLENGE_TYPE_LABEL[challenge.type]} · Level {challenge.difficulty}
           </p>
+          <h2 className="mt-2 font-display text-xl font-semibold leading-snug tracking-tight">{title}</h2>
         </div>
         <button
           onClick={onExit}
           aria-label="Exit challenge"
           title="Exit challenge and return to exploring"
-          className="ui-interactive shrink-0 cursor-pointer rounded-md border border-border p-1.5 text-muted-foreground hover:text-foreground"
+          className="ui-interactive shrink-0 cursor-pointer border border-[#EAEAEA] bg-white p-1.5 text-[#787774] hover:text-[#111111]"
+          style={{ borderRadius: 6 }}
         >
-          <X className="h-3.5 w-3.5" aria-hidden />
+          <IconClose className="h-4 w-4" />
         </button>
       </div>
       <div
-        className={`mt-3 rounded-lg border px-3 py-2 ${border}`}
+        className="mt-4 border-t border-[#EAEAEA] pt-4"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={expected.length}
         aria-valuenow={picked.length}
         aria-label="Challenge progress"
       >
-        <div className="h-1 overflow-hidden rounded-full bg-secondary">
+        <div className="h-1 overflow-hidden bg-[#EAEAEA]" style={{ borderRadius: 9999 }}>
           <div
-            className="h-full rounded-full bg-primary transition-all duration-300"
+            className="h-full bg-[#111111] transition-all duration-300"
             style={{ width: progress + "%" }}
           />
         </div>
-        <p className="mt-2 text-xs tabular-nums text-muted-foreground">
+        <p className="mt-2 font-mono text-xs tabular-nums text-[#787774]">
           {picked.length} of {expected.length} selected
         </p>
       </div>
-      <p className="mt-3 max-w-[62ch] text-sm leading-relaxed">{challenge.prompt}</p>
+      <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-[#2F3437]">{challenge.prompt}</p>
       {picked.length > 0 ? (
         <ol className="mt-2 flex flex-wrap items-center gap-1.5 text-xs" aria-label="Your path so far">
           {picked.map((id, i) => (
@@ -161,7 +155,7 @@ export function ChallengeBar({
                   →
                 </span>
               ) : null}
-              <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 font-semibold text-primary">
+              <span className="bg-[#E1F3FE] px-2 py-0.5 text-xs font-medium uppercase tracking-[0.05em] text-[#1F6C9F]" style={{ borderRadius: 9999 }}>
                 {pickedNames([id])}
               </span>
             </li>
@@ -171,7 +165,7 @@ export function ChallengeBar({
               <span aria-hidden className="text-muted-foreground">
                 →
               </span>
-              <span className="rounded-full border border-dashed border-border px-2 py-0.5 text-muted-foreground">
+              <span className="border border-dashed border-[#EAEAEA] px-2 py-0.5 text-xs text-[#787774]" style={{ borderRadius: 9999 }}>
                 {expected.length - picked.length} more
               </span>
             </li>
@@ -182,18 +176,19 @@ export function ChallengeBar({
         <div
           key={feedback}
           role="status"
-          className={`animate-fade-swap mt-3 flex items-start gap-2 rounded-lg border px-3 py-2 text-sm ${feedbackTone}`}
+          className={`animate-fade-swap mt-4 flex items-start gap-2 border px-3 py-2.5 text-sm ${feedbackTone}`}
+          style={{ borderRadius: 8 }}
         >
           {flash === "bad" ? (
-            <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-caution" aria-hidden />
+            <IconCross className="mt-0.5 h-4 w-4 shrink-0 text-[#956400]" />
           ) : (
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden />
+            <IconCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#346538]" />
           )}
-          <p className="leading-relaxed text-foreground">{feedback}</p>
+          <p className="leading-relaxed text-[#111111]">{feedback}</p>
         </div>
       ) : (
         <p className="mt-3 flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground">
-          <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+          <IconBulb className="mt-0.5 h-4 w-4 shrink-0 text-[#787774]" />
           A wrong selection unlocks a progressively more specific hint.
         </p>
       )}
