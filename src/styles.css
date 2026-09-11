@@ -5,9 +5,12 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * SPATIA design system — minimalist-ui protocol (skill overrides prior themes here).
- * Warm monochrome canvas, ink CTA, Newsreader serif display, system sans UI,
- * JetBrains Mono for data only. Flat surfaces, hairline borders, no glow.
+ * SPATIA design system — design-taste-frontend protocol (variant 2).
+ * Zinc monochrome canvas, emerald action, Cabinet Grotesk display and UI,
+ * Geist Mono and JetBrains Mono for data only. Flat surfaces, hairline
+ * borders, no glow.
+ * Shape rule: surfaces 8px, controls 6px, pills only for trace chips,
+ * status badges, and 3D markers.
  */
 
 @theme inline {
@@ -17,8 +20,8 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
-  --font-display: "Newsreader", "Instrument Serif", Georgia, serif;
-  --font-sans: "Archivo", "SF Pro Display", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Cabinet Grotesk", "Inter Tight", system-ui, sans-serif;
+  --font-sans: "Cabinet Grotesk", system-ui, sans-serif;
   --font-mono: "Geist Mono", "SF Mono", "JetBrains Mono", ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -56,27 +59,27 @@
 }
 
 :root {
-  --radius: 0.375rem;
+  --radius: 0.75rem;
 
-  --background: #fbfbfa;
-  --foreground: #111111;
+  --background: #fafafa;
+  --foreground: #18181b;
 
   --surface: #ffffff;
-  --surface-raised: #f9f9f8;
+  --surface-raised: #f4f4f5;
 
   --card: #ffffff;
-  --card-foreground: #111111;
+  --card-foreground: #18181b;
   --popover: #ffffff;
-  --popover-foreground: #111111;
+  --popover-foreground: #18181b;
 
-  --primary: #111111;
+  --primary: #047857;
   --primary-foreground: #ffffff;
 
-  --secondary: #f7f6f3;
-  --secondary-foreground: #111111;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
 
-  --muted: #f7f6f3;
-  --muted-foreground: #787774;
+  --muted: #f4f4f5;
+  --muted-foreground: #52525b;
 
   /* Ink: sole saturated action color (reserved for primary CTA + send). */
   --ink: #111111;
@@ -94,10 +97,10 @@
   --good: #edf3ec;
   --good-foreground: #346538;
 
-  --border: #eaeaea;
-  --input: #eaeaea;
-  --ring: #111111;
-  --grid: #eaeaea;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #047857;
+  --grid: #e4e4e7;
 
   --chart-1: #2f3437;
   --chart-2: #346538;
@@ -123,7 +126,7 @@
 
   body {
     background-color: var(--color-background);
-    color: #111111;
+    color: #18181b;
     font-family: var(--font-sans);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -141,7 +144,7 @@
 
 @utility panel {
   background-color: #ffffff;
-  border: 1px solid #eaeaea;
+  border: 1px solid #e4e4e7;
   border-radius: 8px;
 }
 
@@ -150,7 +153,7 @@
   font-size: 0.6875rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #787774;
+  color: #52525b;
 }
 
 @utility grid-backdrop {
@@ -226,27 +229,27 @@
 
 /* Visible keyboard focus everywhere: the studio is full of small controls. */
 :where(a, button, input, [tabindex]):focus-visible {
-  outline: 2px solid #111111;
+  outline: 2px solid #047857;
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Browser surfaces carry the warm monochrome world too. */
+/* Browser surfaces carry the zinc monochrome world too. */
 ::selection {
-  background: #111111;
+  background: #047857;
   color: #ffffff;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #eaeaea transparent;
+  scrollbar-color: #e4e4e7 transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #eaeaea;
+  background: #e4e4e7;
   border-radius: 8px;
 }
 *::-webkit-scrollbar-track {

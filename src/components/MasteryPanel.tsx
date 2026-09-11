@@ -17,9 +17,9 @@ export function MasteryPanel({ scene, profile, onReviewWeakArea, onPracticeAgain
   const summary = summarizeMastery(profile, scene);
   if (!summary) {
     return (
-      <div className="border border-[#EAEAEA] bg-white p-6" style={{ borderRadius: 8 }}>
+      <div className="border border-[#e4e4e7] bg-white p-6" style={{ borderRadius: 8 }}>
         <h2 className="font-display text-xl font-semibold tracking-tight">Mastery</h2>
-        <p className="mt-2 text-sm leading-relaxed text-[#2F3437]">No attempts yet in {scene.title}. Complete a challenge to establish your first evidence-based mastery estimate.</p>
+        <p className="mt-2 text-sm leading-relaxed text-[#3f3f46]">No attempts yet in {scene.title}. Complete a challenge to establish your first evidence-based mastery estimate.</p>
       </div>
     );
   }
@@ -43,7 +43,7 @@ export function MasteryPanel({ scene, profile, onReviewWeakArea, onPracticeAgain
           return (
             <div key={axis}>
               <div className="flex items-baseline justify-between gap-2">
-                <dt className="text-xs text-[#787774]">
+                <dt className="text-xs text-[#71717a]">
                   {AXIS_LABEL[axis]}
                   {weakest ? (
                     <span className="ml-1.5 bg-[#FBF3DB] px-1.5 py-px text-[11px] font-medium uppercase tracking-[0.05em] text-[#956400]" style={{ borderRadius: 9999 }}>
@@ -51,10 +51,10 @@ export function MasteryPanel({ scene, profile, onReviewWeakArea, onPracticeAgain
                     </span>
                   ) : null}
                 </dt>
-                <dd className="text-xs font-semibold text-[#111111] tabular-nums">{level}%</dd>
+                <dd className="text-xs font-semibold text-[#18181b] tabular-nums">{level}%</dd>
               </div>
               <div
-                className="mt-1.5 h-1 overflow-hidden bg-[#EAEAEA]" style={{ borderRadius: 9999 }}
+                className="mt-1.5 h-1 overflow-hidden bg-[#e4e4e7]" style={{ borderRadius: 9999 }}
                 role="progressbar"
                 aria-valuemin={0}
                 aria-valuemax={100}
@@ -62,7 +62,7 @@ export function MasteryPanel({ scene, profile, onReviewWeakArea, onPracticeAgain
                 aria-label={`${AXIS_LABEL[axis]} mastery`}
               >
                 <div
-                  className="h-full bg-[#111111] transition-all duration-500"
+                  className="h-full bg-[#18181b] transition-all duration-500"
                   style={{ width: level + "%" }}
                 />
               </div>
@@ -71,14 +71,14 @@ export function MasteryPanel({ scene, profile, onReviewWeakArea, onPracticeAgain
         })}
       </dl>
       {summary.concepts.length > 0 ? (
-        <div className="mt-6 border-t border-[#EAEAEA] pt-4">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">Weak concepts</h3>
+        <div className="mt-6 border-t border-[#e4e4e7] pt-4">
+          <h3 className="text-xs font-semibold uppercase tracking-[0.08em] text-[#71717a]">Weak concepts</h3>
           <ul className="mt-2 space-y-1">
             {summary.concepts.map((concept) => (
-              <li key={concept.id} className="flex items-center justify-between gap-2 border-b border-[#EAEAEA] py-2 text-xs last:border-0">
-                <span className="min-w-0 truncate text-[#2F3437]">{concept.name}</span>
-                <span className="shrink-0 font-mono text-[#787774] tabular-nums">
-                  {concept.level}% · {concept.attempts}
+              <li key={concept.id} className="flex items-center justify-between gap-2 border-b border-[#e4e4e7] py-2 text-xs last:border-0">
+                <span className="min-w-0 truncate text-[#3f3f46]">{concept.name}</span>
+                <span className="shrink-0 font-mono text-[#71717a] tabular-nums">
+                  {concept.level}% ({concept.attempts})
                 </span>
               </li>
             ))}
@@ -90,7 +90,7 @@ export function MasteryPanel({ scene, profile, onReviewWeakArea, onPracticeAgain
           <button
             onClick={() => onReviewWeakArea(summary.recommended!)}
             title={`Start the recommended review challenge: ${summary.recommended.prompt}`}
-            className="ui-interactive inline-flex cursor-pointer items-center justify-center gap-1.5 bg-[#111111] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#333333]"
+            className="ui-interactive inline-flex cursor-pointer items-center justify-center gap-1.5 bg-[#18181b] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#27272a]"
             style={{ borderRadius: 6 }}
           >
             <IconAward className="h-4 w-4 shrink-0" />
@@ -103,7 +103,7 @@ export function MasteryPanel({ scene, profile, onReviewWeakArea, onPracticeAgain
         ) : null}
         <button
           onClick={onPracticeAgain}
-          className="ui-interactive inline-flex cursor-pointer items-center justify-center gap-1.5 border border-[#EAEAEA] bg-white px-4 py-2 text-xs text-[#787774] hover:border-[#111111] hover:text-[#111111]"
+          className="ui-interactive inline-flex cursor-pointer items-center justify-center gap-1.5 border border-[#e4e4e7] bg-white px-4 py-2 text-xs text-[#71717a] hover:border-[#18181b] hover:text-[#18181b]"
           style={{ borderRadius: 6 }}
         >
           <IconReset className="h-4 w-4" /> Practice again

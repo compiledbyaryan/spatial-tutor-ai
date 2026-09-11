@@ -10,7 +10,7 @@ export function createDemoTutorResponse(input: { scene: SceneModule; hotspotId?:
 
   if (input.scene.id === "cardiac" && asksThickness) {
     return TutorResponseSchema.parse({
-      answer: "The left ventricle has a much thicker muscular wall because it must generate enough pressure to drive blood through the high-resistance systemic circulation—from the aorta to the entire body. The right ventricle only pumps to the nearby, low-resistance lungs, so it works at far lower pressure. Both eject a similar volume per beat; the difference is the pressure each circuit demands.",
+      answer: "The left ventricle has a much thicker muscular wall because it must generate enough pressure to drive blood through the high-resistance systemic circulation (from the aorta to the entire body). The right ventricle only pumps to the nearby, low-resistance lungs, so it works at far lower pressure. Both eject a similar volume per beat; the difference is the pressure each circuit demands.",
       focus: "left-ventricle",
       actions: [
         { type: "highlight", hotspotIds: ["left-ventricle", "right-ventricle"] },

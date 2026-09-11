@@ -116,8 +116,8 @@ function ViewpointLine({
 }) {
   if (!viewpoint) {
     return (
-      <p className="text-xs leading-relaxed text-[#787774]">
-        <span className="font-medium text-[#111111]">{hotspotName ?? "Free navigation"}</span>
+      <p className="text-xs leading-relaxed text-[#71717a]">
+        <span className="font-medium text-[#18181b]">{hotspotName ?? "Free navigation"}</span>
       </p>
     );
   }
@@ -129,10 +129,10 @@ function ViewpointLine({
   return (
     <p
       key={`${hotspotName ?? "free"}-${side}-${height}-${range}`}
-      className="animate-fade-swap text-xs leading-relaxed text-[#787774]"
+      className="animate-fade-swap text-xs leading-relaxed text-[#71717a]"
     >
-      <span className="font-medium text-[#111111]">{hotspotName ?? "Free navigation"}</span>
-      {" · "}
+      <span className="font-medium text-[#18181b]">{hotspotName ?? "Free navigation"}</span>
+      <span className="mx-1.5 text-[#d4d4d8]" aria-hidden>|</span>
       {range} view from the {side}, {height}
     </p>
   );
@@ -140,26 +140,26 @@ function ViewpointLine({
 
   return (
     <div
-      className="flex h-full min-h-0 flex-col overflow-hidden border border-[#EAEAEA] bg-white"
+      className="flex h-full min-h-0 flex-col overflow-hidden border border-[#e4e4e7] bg-white"
       style={{ borderRadius: 8 }}
     >
-      <div className="flex items-center justify-between gap-3 border-b border-[#EAEAEA] px-6 py-4">
+      <div className="flex items-center justify-between gap-3 border-b border-[#e4e4e7] px-6 py-4">
         <h2 className="font-display text-lg font-semibold tracking-tight">Spatial AI Tutor</h2>
-        <span className="font-mono text-xs text-[#787774]">Knows your view</span>
+        <span className="font-mono text-xs text-[#71717a]">Knows your view</span>
       </div>
 
-      <div className="flex items-start gap-2 border-b border-[#EAEAEA] bg-[#F7F6F3] px-6 py-3">
+      <div className="flex items-start gap-2 border-b border-[#e4e4e7] bg-[#f4f4f5] px-6 py-3">
         <IconTarget className="mt-0.5 h-4 w-4 shrink-0" />
         <ViewpointLine hotspotName={hotspot ? hotspot.name : null} viewpoint={viewpoint} />
       </div>
 
       <div ref={scroller} className="min-h-0 flex-1 space-y-6 overflow-y-auto px-6 py-6">
         {turns.length === 0 && !mutation.isPending ? (
-          <div className="border border-dashed border-[#EAEAEA] px-6 py-8" style={{ borderRadius: 8 }}>
+          <div className="border border-dashed border-[#e4e4e7] px-6 py-8" style={{ borderRadius: 8 }}>
             <IconSpark className="h-5 w-5" />
-            <p className="mt-4 max-w-[62ch] text-sm leading-relaxed text-[#2F3437]">
+            <p className="mt-4 max-w-[62ch] text-sm leading-relaxed text-[#3f3f46]">
               Click any marker in the 3D model and I&apos;ll explain exactly what you&apos;re
-              looking at — from the angle you&apos;re looking at it. Or just ask me something
+              looking at from your angle. Or just ask me something
               about {scene.title}.
             </p>
           </div>
@@ -169,17 +169,17 @@ function ViewpointLine({
           turn.role === "user" ? (
             <p
               key={i}
-              className="ml-auto w-fit max-w-[85%] bg-[#111111] px-3 py-2 text-sm font-medium text-white"
+              className="ml-auto w-fit max-w-[85%] bg-[#18181b] px-3 py-2 text-sm font-medium text-white"
               style={{ borderRadius: 6 }}
             >
               {turn.content}
             </p>
           ) : (
-            <article key={i} className="max-w-[95%] border-t border-[#EAEAEA] pt-4">
+            <article key={i} className="max-w-[95%] border-t border-[#e4e4e7] pt-4">
               {turn.focus ? (
                 <h3 className="font-display text-lg font-semibold tracking-tight">{turn.focus}</h3>
               ) : null}
-              <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-[#2F3437]">
+              <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-[#3f3f46]">
                 {turn.content}
               </p>
               {turn.followUp ? (
@@ -187,7 +187,7 @@ function ViewpointLine({
                   onClick={() => submit(turn.followUp!)}
                   disabled={mutation.isPending}
                   title="Ask the tutor this follow-up question"
-                  className="ui-interactive mt-3 inline-flex cursor-pointer items-center gap-1.5 border border-[#EAEAEA] bg-[#F7F6F3] px-2.5 py-1.5 text-left text-xs text-[#2F3437] hover:border-[#111111] disabled:opacity-50"
+                  className="ui-interactive mt-3 inline-flex cursor-pointer items-center gap-1.5 border border-[#e4e4e7] bg-[#f4f4f5] px-2.5 py-1.5 text-left text-xs text-[#3f3f46] hover:border-[#18181b] disabled:opacity-50"
                   style={{ borderRadius: 6 }}
                 >
                   <IconSpark className="h-3.5 w-3.5 shrink-0" />
@@ -205,10 +205,10 @@ function ViewpointLine({
 
         {mutation.isPending ? (
           <div className="space-y-2" role="status" aria-label="Tutor is reading your viewpoint">
-            <div className="h-3 w-3/4 animate-pulse bg-[#F7F6F3]" style={{ borderRadius: 4 }} />
-            <div className="h-3 w-full animate-pulse bg-[#F7F6F3]" style={{ borderRadius: 4 }} />
-            <div className="h-3 w-2/3 animate-pulse bg-[#F7F6F3]" style={{ borderRadius: 4 }} />
-            <p className="flex items-center gap-2 pt-1 text-xs text-[#787774]">
+            <div className="h-3 w-3/4 animate-pulse bg-[#f4f4f5]" style={{ borderRadius: 4 }} />
+            <div className="h-3 w-full animate-pulse bg-[#f4f4f5]" style={{ borderRadius: 4 }} />
+            <div className="h-3 w-2/3 animate-pulse bg-[#f4f4f5]" style={{ borderRadius: 4 }} />
+            <p className="flex items-center gap-2 pt-1 text-xs text-[#71717a]">
               <IconSpark className="h-4 w-4 animate-spin" />
               Reading your viewpoint…
             </p>
@@ -217,7 +217,7 @@ function ViewpointLine({
 
         {mutation.isError ? (
           <div
-            className="border border-[#EAEAEA] bg-[#FDEBEC] px-4 py-3 text-sm"
+            className="border border-[#e4e4e7] bg-[#FDEBEC] px-4 py-3 text-sm"
             style={{ borderRadius: 8 }}
             role="alert"
           >
@@ -225,10 +225,10 @@ function ViewpointLine({
             {onStartChallenge ? (
               <button
                 onClick={() => onStartChallenge()}
-                className="ui-interactive mt-2 inline-flex cursor-pointer items-center gap-1.5 border border-[#EAEAEA] bg-white px-2.5 py-1.5 text-xs text-[#2F3437] hover:border-[#111111]"
+                className="ui-interactive mt-2 inline-flex cursor-pointer items-center gap-1.5 border border-[#e4e4e7] bg-white px-2.5 py-1.5 text-xs text-[#3f3f46] hover:border-[#18181b]"
                 style={{ borderRadius: 6 }}
               >
-                <IconBulb className="h-4 w-4" /> The tutor is offline — practice
+                <IconBulb className="h-4 w-4" /> The tutor is offline. Practice
                 in 3D instead
               </button>
             ) : null}
@@ -236,7 +236,7 @@ function ViewpointLine({
         ) : null}
       </div>
 
-      <div className="border-t border-[#EAEAEA] px-6 py-4">
+      <div className="border-t border-[#e4e4e7] px-6 py-4">
         {onStageCompare && scene.id === "cardiac" ? (
           <button
             onClick={() => {
@@ -244,7 +244,7 @@ function ViewpointLine({
             }}
             disabled={mutation.isPending}
             title="Stage the ventricle comparison and ask the canonical question"
-            className="ui-interactive mb-3 inline-flex w-full cursor-pointer items-center justify-center gap-1.5 border border-[#111111] bg-white px-3 py-2 text-xs font-semibold text-[#111111] hover:bg-[#F7F6F3] disabled:opacity-50"
+            className="ui-interactive mb-3 inline-flex w-full cursor-pointer items-center justify-center gap-1.5 border border-[#18181b] bg-white px-3 py-2 text-xs font-semibold text-[#18181b] hover:bg-[#f4f4f5] disabled:opacity-50"
             style={{ borderRadius: 6 }}
           >
             <IconEye className="h-4 w-4" /> Show me: why is the left ventricle
@@ -257,7 +257,7 @@ function ViewpointLine({
               key={s}
               onClick={() => submit(s)}
               disabled={mutation.isPending}
-              className="ui-interactive cursor-pointer border border-[#EAEAEA] bg-white px-2.5 py-1 text-xs text-[#787774] hover:border-[#111111] hover:text-[#111111] disabled:opacity-50"
+              className="ui-interactive cursor-pointer border border-[#e4e4e7] bg-white px-2.5 py-1 text-xs text-[#71717a] hover:border-[#18181b] hover:text-[#18181b] disabled:opacity-50"
               style={{ borderRadius: 6 }}
             >
               {s}
@@ -276,13 +276,13 @@ function ViewpointLine({
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Ask about what you're seeing…"
             aria-label="Ask the tutor about this scene"
-            className="min-w-0 flex-1 border border-[#EAEAEA] bg-white px-3 py-2 text-sm outline-none placeholder:text-[#787774] focus:border-[#111111]"
+            className="min-w-0 flex-1 border border-[#e4e4e7] bg-white px-3 py-2 text-sm outline-none placeholder:text-[#71717a] focus:border-[#18181b]"
             style={{ borderRadius: 6 }}
           />
           <button
             type="submit"
             disabled={mutation.isPending || !draft.trim()}
-            className="ui-interactive inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center bg-[#111111] text-white hover:bg-[#333333] disabled:opacity-40"
+            className="ui-interactive inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center bg-[#18181b] text-white hover:bg-[#27272a] disabled:opacity-40"
             style={{ borderRadius: 6 }}
             aria-label="Send question"
           >

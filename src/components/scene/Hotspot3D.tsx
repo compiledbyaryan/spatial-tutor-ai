@@ -75,14 +75,14 @@ export function Hotspot3D({
           <div
             className={`whitespace-nowrap border px-2 py-1 text-[11px] transition-opacity ${
               active
-                ? "border-[#111111] bg-[#111111] font-semibold text-white opacity-100"
+                ? "border-[#18181b] bg-[#18181b] font-semibold text-white opacity-100"
                 : hovered
-                  ? "border-[#111111] bg-white font-medium text-[#111111] opacity-100"
-                  : "border-[#EAEAEA] bg-white/95 text-[#2F3437] opacity-95"
+                  ? "border-[#18181b] bg-white font-medium text-[#18181b] opacity-100"
+                  : "border-[#e4e4e7] bg-white/95 text-[#3f3f46] opacity-95"
             }`}
             style={{ transform: "translateY(-2.2rem)", borderRadius: 6 }}
           >
-            <span className="mr-1.5 font-mono text-[10px] text-[#787774] tabular-nums">
+            <span className="mr-1.5 font-mono text-[10px] text-[#71717a] tabular-nums">
               {String(index + 1).padStart(2, "0")}
             </span>
             {hotspot.name}

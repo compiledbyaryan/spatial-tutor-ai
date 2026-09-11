@@ -17,7 +17,7 @@ export function SiteNav() {
         const { data } = await supabase.auth.getSession();
         if (alive) setEmail(data.session?.user.email ?? null);
       } catch {
-        // Supabase is optional (demo mode ships without keys) — stay signed out.
+        // Supabase is optional (demo mode ships without keys), so stay signed out.
         if (alive) setEmail(null);
       }
       try {
@@ -26,7 +26,7 @@ export function SiteNav() {
         });
         unsubscribe = () => sub.subscription.unsubscribe();
       } catch {
-        // No Supabase endpoint configured — no session subscription.
+        // No Supabase endpoint configured, so there is no session subscription.
       }
     })();
     return () => {
@@ -36,8 +36,11 @@ export function SiteNav() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[#EAEAEA] bg-[#FBFBFA]">
-      <nav aria-label="Primary" className="mx-auto flex max-w-5xl items-center gap-4 px-6 py-3">
+    <header className="sticky top-0 z-40 border-b border-[#e4e4e7] bg-[#fafafa]">
+      <nav
+        aria-label="Primary"
+        className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-6"
+      >
         <Link to="/" className="ui-interactive font-display text-lg font-semibold tracking-tight">
           SPATIA
         </Link>
@@ -47,7 +50,7 @@ export function SiteNav() {
               key={l.label}
               to={l.to}
               params={l.params}
-              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 text-sm text-[#787774] hover:text-[#111111]"
+              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 text-sm text-[#71717a] hover:text-[#18181b]"
             >
               <IconBox className="h-4 w-4" />
               {l.label}
@@ -57,7 +60,7 @@ export function SiteNav() {
         <div className="ml-auto flex items-center gap-2">
           {email ? (
             <>
-              <span className="hidden max-w-[160px] truncate font-mono text-xs text-[#787774] sm:block">
+              <span className="hidden max-w-[160px] truncate font-mono text-xs text-[#71717a] sm:block">
                 {email}
               </span>
               <button
@@ -68,7 +71,7 @@ export function SiteNav() {
                     setEmail(null);
                   }
                 }}
-                className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 border border-[#EAEAEA] bg-white px-3 py-1.5 text-xs text-[#2F3437] hover:text-[#111111]"
+                className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 border border-[#e4e4e7] bg-white px-3 py-1.5 text-xs text-[#3f3f46] hover:text-[#18181b]"
                 style={{ borderRadius: 6 }}
               >
                 <IconLogout className="h-4 w-4" /> Sign out
@@ -77,7 +80,7 @@ export function SiteNav() {
           ) : (
             <Link
               to="/auth"
-              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 bg-[#111111] px-4 py-1.5 text-xs font-medium text-white hover:bg-[#333333]"
+              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 bg-[#18181b] px-4 py-1.5 text-xs font-medium text-white hover:bg-[#27272a]"
               style={{ borderRadius: 6 }}
             >
               Sign in

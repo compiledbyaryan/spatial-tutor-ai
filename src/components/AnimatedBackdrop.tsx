@@ -1,8 +1,8 @@
-/** Static warm wash (minimalist-ui: no ambient motion, no gradients). */
+/** Static zinc wash (design-taste-frontend: calm page, motion stays in reveals). */
 export function AnimatedBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="absolute inset-0 bg-[#F7F6F3]" />
+      <div className="absolute inset-0 bg-[#fafafa]" />
       <div
         className="absolute rounded-none"
         style={{
@@ -10,7 +10,7 @@ export function AnimatedBackdrop() {
           left: "-8rem",
           height: "34rem",
           width: "34rem",
-          background: "#EAEAEA",
+          background: "#e4e4e7",
           opacity: 0.5,
           filter: "blur(90px)",
         }}
@@ -22,7 +22,7 @@ export function AnimatedBackdrop() {
           right: "-10rem",
           height: "30rem",
           width: "30rem",
-          background: "#EAEAEA",
+          background: "#e4e4e7",
           opacity: 0.4,
           filter: "blur(90px)",
         }}
