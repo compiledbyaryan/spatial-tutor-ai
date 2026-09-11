@@ -106,46 +106,52 @@ export function ChallengeBar({
       .map((id) => id.replace(/-/g, " "))
       .map((name) => name.replace(/\b\w/g, (letter) => letter.toUpperCase()))
       .join(" → ");
+  const feedbackTone =
+    flash === "bad" ? "border-caution/50 bg-caution/10" : "border-accent/50 bg-accent/10";
 
   return (
     <div
       role="region"
       aria-label={"Challenge: " + challenge.prompt}
       className={
-        "animate-fade-swap pointer-events-auto absolute left-4 right-4 top-4 rounded-xl border bg-background/90 p-3 shadow-(--shadow-overlay) backdrop-blur-md md:left-auto md:right-4 md:w-[390px] " +
-        border
+        "animate-fade-swap pointer-events-auto absolute left-4 right-4 top-4 rounded-lg border border-border/70 bg-surface/95 p-4 shadow-(--shadow-overlay) backdrop-blur-md md:left-auto md:right-4 md:w-[390px]"
       }
     >
-      <div className="flex items-start justify-between gap-2">
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="label-mono text-primary">
+          <h2 className="text-base font-semibold leading-snug">{title}</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
             {CHALLENGE_TYPE_LABEL[challenge.type]} · Level {challenge.difficulty}
           </p>
-          <p className="mt-1 font-display text-sm font-semibold">{title}</p>
         </div>
         <button
           onClick={onExit}
           aria-label="Exit challenge"
           title="Exit challenge and return to exploring"
-          className="ui-interactive shrink-0 cursor-pointer rounded-lg border border-border p-1.5 text-muted-foreground hover:text-foreground"
+          className="ui-interactive shrink-0 cursor-pointer rounded-md border border-border p-1.5 text-muted-foreground hover:text-foreground"
         >
           <X className="h-3.5 w-3.5" aria-hidden />
         </button>
       </div>
       <div
-        className="mt-2 h-1 overflow-hidden rounded-full bg-secondary"
+        className={`mt-3 rounded-lg border px-3 py-2 ${border}`}
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={expected.length}
         aria-valuenow={picked.length}
         aria-label="Challenge progress"
       >
-        <div
-          className="h-full rounded-full bg-primary transition-all duration-300"
-          style={{ width: progress + "%" }}
-        />
+        <div className="h-1 overflow-hidden rounded-full bg-secondary">
+          <div
+            className="h-full rounded-full bg-primary transition-all duration-300"
+            style={{ width: progress + "%" }}
+          />
+        </div>
+        <p className="mt-2 text-xs tabular-nums text-muted-foreground">
+          {picked.length} of {expected.length} selected
+        </p>
       </div>
-      <p className="mt-3 text-sm leading-relaxed">{challenge.prompt}</p>
+      <p className="mt-3 max-w-[62ch] text-sm leading-relaxed">{challenge.prompt}</p>
       {picked.length > 0 ? (
         <ol className="mt-2 flex flex-wrap items-center gap-1.5 text-xs" aria-label="Your path so far">
           {picked.map((id, i) => (
@@ -155,7 +161,7 @@ export function ChallengeBar({
                   →
                 </span>
               ) : null}
-              <span className="rounded-full border border-accent/50 bg-accent/10 px-2 py-0.5 font-medium text-foreground">
+              <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 font-semibold text-primary">
                 {pickedNames([id])}
               </span>
             </li>
@@ -173,24 +179,21 @@ export function ChallengeBar({
         </ol>
       ) : null}
       {feedback ? (
-        <p
+        <div
           key={feedback}
-          className={
-            "animate-fade-swap mt-2 flex items-start gap-1.5 text-sm " +
-            (flash === "bad" ? "text-foreground" : "text-foreground")
-          }
           role="status"
+          className={`animate-fade-swap mt-3 flex items-start gap-2 rounded-lg border px-3 py-2 text-sm ${feedbackTone}`}
         >
           {flash === "bad" ? (
-            <XCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+            <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-caution" aria-hidden />
           ) : (
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden />
           )}
-          {feedback}
-        </p>
+          <p className="leading-relaxed text-foreground">{feedback}</p>
+        </div>
       ) : (
-        <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground">
-          <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" aria-hidden />
+        <p className="mt-3 flex items-start gap-1.5 text-xs leading-relaxed text-muted-foreground">
+          <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
           A wrong selection unlocks a progressively more specific hint.
         </p>
       )}

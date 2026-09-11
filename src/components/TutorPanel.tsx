@@ -139,15 +139,15 @@ function ViewpointLine({
 }
 
   return (
-    <div className="panel flex h-full min-h-0 flex-col overflow-hidden">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-border/70 bg-surface/60">
       <div className="flex items-center justify-between gap-3 border-b border-border/70 px-4 py-3">
-        <div className="flex items-center gap-2">
+        <h2 className="flex items-center gap-2 text-sm font-semibold">
           <span className="relative flex h-2 w-2" aria-hidden>
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
-          <span className="font-display text-sm font-semibold">Spatial AI Tutor</span>
-        </div>
-        <span className="label-mono">context aware</span>
+          Spatial AI Tutor
+        </h2>
+        <span className="text-xs text-muted-foreground">Knows your view</span>
       </div>
 
       <div className="flex items-start gap-2 border-b border-border/70 bg-secondary/40 px-4 py-2.5">
@@ -155,11 +155,11 @@ function ViewpointLine({
         <ViewpointLine hotspotName={hotspot ? hotspot.name : null} viewpoint={viewpoint} />
       </div>
 
-      <div ref={scroller} className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
+      <div ref={scroller} className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
         {turns.length === 0 && !mutation.isPending ? (
-          <div className="rounded-lg border border-dashed border-border/80 bg-background/40 p-4">
+          <div className="rounded-lg border border-dashed border-border px-4 py-5">
             <Sparkles className="h-4 w-4 text-primary" aria-hidden />
-            <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-3 max-w-[62ch] text-sm leading-relaxed text-muted-foreground">
               Click any marker in the 3D model and I&apos;ll explain exactly what you&apos;re
               looking at — from the angle you&apos;re looking at it. Or just ask me something
               about {scene.title}.
@@ -169,19 +169,20 @@ function ViewpointLine({
 
         {turns.map((turn, i) =>
           turn.role === "user" ? (
-            <div
+            <p
               key={i}
-              className="ml-auto max-w-[85%] rounded-lg rounded-br-sm bg-primary/15 px-3 py-2 text-sm text-foreground"
+              className="ml-auto w-fit max-w-[85%] rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
             >
               {turn.content}
-            </div>
+            </p>
           ) : (
-            <div
-              key={i}
-              className="max-w-[95%] rounded-lg rounded-bl-sm border border-border/70 bg-surface-raised/70 px-3 py-2.5"
-            >
-              {turn.focus ? <p className="label-mono mb-1.5">{turn.focus}</p> : null}
-              <p className="max-w-[62ch] text-sm leading-relaxed text-foreground/90">
+            <article key={i} className="max-w-[95%] border-l-2 border-primary/50 pl-3">
+              {turn.focus ? (
+                <h3 className="text-xs font-semibold uppercase tracking-[0.08em] text-primary">
+                  {turn.focus}
+                </h3>
+              ) : null}
+              <p className="mt-1 max-w-[62ch] text-sm leading-relaxed text-foreground/90">
                 {turn.content}
               </p>
               {turn.followUp ? (
@@ -189,18 +190,18 @@ function ViewpointLine({
                   onClick={() => submit(turn.followUp!)}
                   disabled={mutation.isPending}
                   title="Ask the tutor this follow-up question"
-                  className="ui-interactive mt-2 inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-1 text-left text-[11px] font-medium text-primary hover:bg-primary/15 disabled:opacity-50"
+                  className="ui-interactive mt-2 inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-primary/40 bg-primary/10 px-2.5 py-1 text-left text-xs font-semibold text-primary hover:bg-primary/15 disabled:opacity-50"
                 >
                   <Sparkles className="h-3 w-3 shrink-0" aria-hidden />
                   {turn.followUp}
                 </button>
               ) : null}
               {turn.mode && turn.mode !== "live" ? (
-                <p className="label-mono mt-2 inline-block rounded-full border border-border/60 px-2 py-0.5">
+                <p className="mt-2 inline-block rounded-full border border-border px-2 py-0.5 text-[11px] text-muted-foreground">
                   {turn.mode === "demo" ? "guided demo answer" : "offline answer"}
                 </p>
               ) : null}
-            </div>
+            </article>
           ),
         )}
 
@@ -243,7 +244,7 @@ function ViewpointLine({
             }}
             disabled={mutation.isPending}
             title="Stage the ventricle comparison and ask the canonical question"
-            className="ui-interactive mb-2 inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-accent/50 bg-accent/10 px-3 py-2 text-xs font-medium text-accent hover:bg-accent/15 disabled:opacity-50"
+            className="ui-interactive mb-2 inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-md border border-primary/50 bg-primary/10 px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/15 disabled:opacity-50"
           >
             <Eye className="h-3.5 w-3.5" aria-hidden /> Show me: why is the left ventricle
             thicker?
@@ -255,7 +256,7 @@ function ViewpointLine({
               key={s}
               onClick={() => submit(s)}
               disabled={mutation.isPending}
-              className="ui-interactive cursor-pointer rounded-full border border-border/80 px-2.5 py-1 text-[11px] text-muted-foreground hover:border-primary/60 hover:text-primary disabled:opacity-50"
+              className="ui-interactive cursor-pointer rounded-md border border-border px-2.5 py-1 text-xs text-muted-foreground hover:border-primary/60 hover:text-primary disabled:opacity-50"
             >
               {s}
             </button>
@@ -273,12 +274,12 @@ function ViewpointLine({
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Ask about what you're seeing…"
             aria-label="Ask the tutor about this scene"
-            className="min-w-0 flex-1 rounded-lg border border-input bg-background/60 px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-primary/70"
+            className="min-w-0 flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-primary"
           />
           <button
             type="submit"
             disabled={mutation.isPending || !draft.trim()}
-            className="ui-interactive inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-accent text-accent-foreground hover:opacity-90 disabled:opacity-40"
+            className="ui-interactive inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-md bg-accent text-accent-foreground hover:opacity-90 disabled:opacity-40"
             aria-label="Send question"
           >
             <Send className="h-4 w-4" aria-hidden />

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, Layers, Orbit, RotateCcw, Sliders, Swords } from "lucide-react";
+import { ArrowLeft, Layers, Orbit, RotateCcw, Swords } from "lucide-react";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { ChallengeBar, type ChallengeOutcome } from "./ChallengeBar";
@@ -213,11 +213,11 @@ export function StudioView({ scene }: { scene: SceneModule }) {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden">
-      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-border/70 bg-background/70 px-4 py-3 backdrop-blur-xl md:gap-4 md:px-6">
-        <div className="flex min-w-0 items-center gap-3 md:gap-4">
+      <header className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 border-b border-border/70 bg-background/90 px-4 py-2.5 backdrop-blur md:px-6">
+        <div className="flex min-w-0 items-center gap-3">
           <Link
             to="/"
-            className="ui-interactive inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-1.5 text-sm text-muted-foreground hover:text-primary"
+            className="ui-interactive inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-md px-1 py-1.5 text-sm text-muted-foreground hover:text-primary"
             aria-label="Back to module library"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden />
@@ -225,16 +225,17 @@ export function StudioView({ scene }: { scene: SceneModule }) {
           </Link>
           <div className="h-6 w-px shrink-0 bg-border" aria-hidden />
           <div className="min-w-0">
-            <h1 className="truncate font-display text-base font-semibold md:text-lg">
-              {scene.title}
-            </h1>
-            <p className="label-mono truncate">
+            <h1 className="truncate text-base font-semibold md:text-lg">{scene.title}</h1>
+            <p className="truncate text-xs text-muted-foreground">
               {scene.subject} · {scene.level}
             </p>
           </div>
         </div>
         {/* Explore → Ask → Challenge → Master is one workflow, not four pages. */}
-        <nav aria-label="Learning modes" className="flex shrink-0 items-center gap-1">
+        <nav
+          aria-label="Learning modes"
+          className="order-3 flex w-full shrink-0 items-center gap-1 sm:order-none sm:w-auto"
+        >
           <ModeTabs
             mode={mode}
             onExplore={exitChallenge}
@@ -243,14 +244,14 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             hasChallenge={sceneChallenges.length > 0}
           />
         </nav>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           <button
             onClick={() => setDrawer((d) => !d)}
             aria-expanded={drawer}
             aria-label={drawer ? "Close structures panel" : "Open structures and challenges panel"}
-            className={`ui-interactive inline-flex min-h-[36px] min-w-[36px] cursor-pointer items-center justify-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs lg:hidden ${
+            className={`ui-interactive inline-flex min-h-[36px] min-w-[36px] cursor-pointer items-center justify-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs lg:hidden ${
               drawer
-                ? "border-primary/70 bg-primary/15 text-primary"
+                ? "border-primary/60 bg-primary/10 font-semibold text-primary"
                 : "border-border text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -261,9 +262,9 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             onClick={() => setAutoRotate((v) => !v)}
             aria-pressed={autoRotate}
             title="Slowly orbit the camera"
-            className={`ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs ${
+            className={`ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs ${
               autoRotate
-                ? "border-primary/70 bg-primary/15 text-primary"
+                ? "border-primary/60 bg-primary/10 font-semibold text-primary"
                 : "border-border text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -277,7 +278,7 @@ export function StudioView({ scene }: { scene: SceneModule }) {
               controller.dispatch({ type: "resetScene" });
             }}
             title="Restore the default camera and visibility"
-            className="ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+            className="ui-interactive inline-flex min-h-[36px] cursor-pointer items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground"
           >
             <RotateCcw className="h-3.5 w-3.5" aria-hidden />{" "}
             <span className="hidden sm:inline">Reset view</span>
@@ -289,7 +290,7 @@ export function StudioView({ scene }: { scene: SceneModule }) {
         {/* Structure index */}
         <aside
           aria-label="Structure index and challenges"
-          className="panel order-2 hidden min-h-0 flex-col overflow-hidden lg:order-1 lg:flex"
+          className="order-2 hidden min-h-0 flex-col overflow-hidden rounded-xl border border-border/70 bg-surface/60 lg:order-1 lg:flex"
         >
           <IndexPanel
             scene={scene}
@@ -306,7 +307,7 @@ export function StudioView({ scene }: { scene: SceneModule }) {
         {/* Viewport */}
         <section
           aria-label={`${scene.title} 3D viewport`}
-          className="panel relative order-1 min-h-[52vh] overflow-hidden sm:min-h-[48vh] lg:order-2 lg:min-h-0"
+          className="relative order-1 min-h-[52vh] overflow-hidden rounded-xl border border-border/70 bg-[#101828] sm:min-h-[48vh] lg:order-2 lg:min-h-0"
         >
           <SceneCanvas
             key={key}
@@ -321,9 +322,11 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             labels={controller.state.labels}
             emphasizeModels={MODEL_EMPHASIS_SCENES.has(scene.id)}
           />
-          <div className="pointer-events-none absolute left-4 top-4 max-w-xs">
-            <p className="label-mono">{scene.accentLabel} module</p>
-            <p className="mt-1 text-xs text-muted-foreground">{scene.tagline}</p>
+          <div className="pointer-events-none absolute left-4 top-4 max-w-xs rounded-lg bg-black/55 px-3 py-2 backdrop-blur-sm">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/85">
+              {scene.accentLabel} module
+            </p>
+            <p className="mt-0.5 text-xs text-white/70">{scene.tagline}</p>
           </div>
            {mode === "challenge" && challenge ? (
             <ChallengeBar
@@ -347,11 +350,7 @@ export function StudioView({ scene }: { scene: SceneModule }) {
               key={narration}
               role="status"
               aria-live="polite"
-              className={`animate-fade-swap pointer-events-none absolute left-4 top-16 max-w-md rounded-full border px-3 py-1 text-xs backdrop-blur-md ${
-                mode === "challenge"
-                  ? "border-primary/40 bg-primary/10 text-primary"
-                  : "border-border/70 bg-background/80 text-muted-foreground"
-              }`}
+              className="animate-fade-swap pointer-events-none absolute left-4 top-20 max-w-md rounded-lg bg-black/55 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm"
             >
               {narration}
             </p>
@@ -359,19 +358,21 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             {hotspot && mode !== "challenge" ? (
             <div
               key={hotspot.id}
-              className="animate-fade-swap pointer-events-none absolute bottom-4 left-4 right-4 rounded-xl border border-border/70 bg-surface/95 p-3 shadow-(--shadow-overlay) backdrop-blur-md md:max-w-md"
+              className="animate-fade-swap pointer-events-none absolute bottom-4 left-4 right-4 max-w-md rounded-lg bg-black/60 p-3 backdrop-blur-sm"
             >
-              <p className="label-mono text-primary">{hotspot.category}</p>
-              <p className="mt-1 font-display text-sm font-semibold">{hotspot.name}</p>
-              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">
+                {hotspot.category}
+              </p>
+              <p className="mt-1 text-sm font-semibold text-white">{hotspot.name}</p>
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/80">
                 {hotspot.summary}
               </p>
-              <p className="mt-2 hidden text-[11px] text-muted-foreground/80 md:block">
+              <p className="mt-1.5 hidden text-[11px] text-white/60 md:block">
                 {hotspot.facts[0]}
               </p>
             </div>
            ) : mode !== "challenge" ? (
-            <p className="pointer-events-none absolute bottom-4 left-4 text-xs text-muted-foreground">
+            <p className="pointer-events-none absolute bottom-4 left-4 rounded-md bg-black/55 px-2.5 py-1 text-xs text-white/80 backdrop-blur-sm">
               Drag to orbit · scroll to zoom · click a marker to ask the tutor
             </p>
           ) : null}
@@ -459,11 +460,11 @@ function IndexPanel({
 }) {
   return (
     <>
-      <div className="flex items-center gap-2 border-b border-border/70 px-4 py-3">
+      <h2 className="flex items-center gap-2 px-4 pt-3 pb-1 text-sm font-semibold">
         <Layers className="h-4 w-4 text-primary" aria-hidden />
-        <span className="font-display text-sm font-semibold">Structure index</span>
-      </div>
-      <ul className="min-h-0 flex-1 space-y-1 overflow-y-auto p-2">
+        Structures
+      </h2>
+      <ul className="min-h-0 flex-1 space-y-0.5 overflow-y-auto px-2 pb-2">
         {scene.hotspots.map((h, i) => {
           const selected = activeId === h.id && mode !== "challenge";
           return (
@@ -472,20 +473,17 @@ function IndexPanel({
                 onClick={() => onPick(h.id)}
                 aria-current={selected ? "true" : undefined}
                 title={`${h.name} · ${h.category}. ${mode === "challenge" ? "Submit as challenge answer" : "Focus and ask the tutor"}`}
-                className={`ui-interactive w-full cursor-pointer rounded-lg px-3 py-2.5 text-left ${
+                className={`ui-interactive w-full cursor-pointer rounded-md px-2.5 py-2 text-left ${
                   selected
-                    ? "bg-primary/15 ring-1 ring-primary/40"
-                    : "hover:bg-secondary/60"
+                    ? "bg-primary/10 font-semibold text-primary"
+                    : "text-foreground/85 hover:bg-secondary/70"
                 }`}
               >
                 <span className="flex items-baseline gap-2">
-                  <span className="font-mono text-[10px] text-muted-foreground tabular-nums">
+                  <span className="text-[11px] text-muted-foreground tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-sm font-medium">{h.name}</span>
-                </span>
-                <span className="mt-0.5 block pl-6 text-[11px] text-muted-foreground">
-                  {h.category}
+                  <span className="text-sm">{h.name}</span>
                 </span>
               </button>
             </li>
@@ -493,25 +491,27 @@ function IndexPanel({
         })}
       </ul>
       <div className="border-t border-border/70 px-4 py-3">
-        <div className="mb-2 flex items-center gap-2">
+        <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold">
           <Swords className="h-3.5 w-3.5 text-primary" aria-hidden />
-          <span className="label-mono">Challenges</span>
-        </div>
+          Challenges
+        </h2>
         {sceneChallenges.length === 0 ? (
           <p className="text-xs text-muted-foreground">
             No challenges authored for this scene yet.
           </p>
         ) : (
-          <ul className="space-y-1">
+          <ul className="space-y-0.5">
             {sceneChallenges.map((c) => (
               <li key={c.id}>
                 <button
                   onClick={() => onStartChallenge(c)}
                   title={`Start challenge: ${c.prompt}`}
-                  className="ui-interactive w-full cursor-pointer rounded-lg px-2 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary/60 hover:text-primary"
+                  className="ui-interactive w-full cursor-pointer rounded-md px-2 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary/60 hover:text-primary"
                 >
                   <span className="line-clamp-2">{c.prompt}</span>
-                  <span className="label-mono mt-0.5 block">Level {c.difficulty}</span>
+                  <span className="mt-0.5 block text-[11px] text-muted-foreground/80">
+                    Level {c.difficulty}
+                  </span>
                 </button>
               </li>
             ))}
@@ -520,14 +520,13 @@ function IndexPanel({
       </div>
       {(SCENE_TOGGLES[scene.id] ?? []).length > 0 ? (
         <div className="border-t border-border/70 px-4 py-3">
-          <div className="mb-2 flex items-center gap-2">
-            <Sliders className="h-3.5 w-3.5 text-accent" aria-hidden />
-            <span className="label-mono">Render options</span>
-          </div>
+          <h2 className="mb-2 text-xs font-semibold text-muted-foreground">
+            Render options
+          </h2>
           {(SCENE_TOGGLES[scene.id] ?? []).map((t) => (
             <label
               key={t.key}
-              className="ui-interactive mb-1.5 flex cursor-pointer items-center gap-2 rounded-md px-1 py-0.5 text-xs text-muted-foreground hover:text-foreground"
+              className="ui-interactive mb-1 flex cursor-pointer items-center gap-2 rounded-md px-1 py-0.5 text-xs text-muted-foreground hover:text-foreground"
             >
               <input
                 type="checkbox"
@@ -564,33 +563,31 @@ const ModeTabs = memo(function ModeTabs({
   hasChallenge: boolean;
 }) {
   return (
-    <>
-      {MODES.map((m, index) => {
+    <div
+      role="group"
+      aria-label="Learning modes"
+      className="flex items-center gap-0.5 rounded-lg border border-border/70 bg-secondary/50 p-0.5"
+    >
+      {MODES.map((m) => {
         const active = mode === m.id;
         const disabled = m.id === "challenge" && !hasChallenge;
         return (
-          <span key={m.id} className="flex items-center gap-1">
-            {index > 0 ? (
-              <span aria-hidden className="text-[10px] text-muted-foreground/50">
-                →
-              </span>
-            ) : null}
-            <button
-              onClick={m.id === "explore" ? onExplore : m.id === "challenge" ? onChallenge : onMaster}
-              disabled={disabled}
-              aria-current={active ? "page" : undefined}
-              title={m.hint}
-              className={`ui-interactive rounded-lg px-2 py-1.5 text-xs font-medium sm:px-3 ${
-                active
-                  ? "bg-primary/15 text-primary ring-1 ring-primary/40"
-                  : "text-muted-foreground hover:text-foreground"
-              } ${disabled ? "cursor-not-allowed opacity-40" : "cursor-pointer"}`}
-            >
-              {m.label}
-            </button>
-          </span>
+          <button
+            key={m.id}
+            onClick={m.id === "explore" ? onExplore : m.id === "challenge" ? onChallenge : onMaster}
+            disabled={disabled}
+            aria-current={active ? "page" : undefined}
+            title={m.hint}
+            className={`ui-interactive rounded-md px-2.5 py-1.5 text-xs font-medium sm:px-3 ${
+              active
+                ? "bg-surface font-semibold text-primary shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            } ${disabled ? "cursor-not-allowed opacity-40" : "cursor-pointer"}`}
+          >
+            {m.label}
+          </button>
         );
       })}
-    </>
+    </div>
   );
 });

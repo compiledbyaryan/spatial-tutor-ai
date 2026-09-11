@@ -38,12 +38,12 @@ export function SiteNav() {
   }, []);
 
   return (
-    <header className="sticky top-4 z-40 mx-auto max-w-6xl px-4 md:px-6">
-      <nav
-        aria-label="Primary"
-        className="panel flex items-center gap-3 px-4 py-2.5"
-      >
-        <Link to="/" className="font-display text-base font-bold tracking-tight">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur">
+      <nav aria-label="Primary" className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 md:px-6">
+        <Link
+          to="/"
+          className="ui-interactive rounded-md font-display text-base font-bold tracking-tight"
+        >
           SPATIA
         </Link>
         <div className="ml-2 hidden flex-1 items-center gap-1 md:flex">
