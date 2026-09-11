@@ -12,7 +12,7 @@ export const Route = createFileRoute("/explore/$sceneId")({
   },
   head: ({ loaderData }) => {
     const scene = loaderData?.scene;
-    const title = scene ? `${scene.title} — SPATIA 3D Studio` : "Module unavailable — SPATIA";
+    const title = scene ? `${scene.title}: SPATIA 3D Studio` : "Module unavailable: SPATIA";
     const description = scene
       ? `${scene.tagline}. Explore ${scene.title} in real-time 3D with an AI tutor that explains whatever structure you click.`
       : "This SPATIA learning module could not be loaded.";
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/explore/$sceneId")({
 
 function ModuleNotFound() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-6 text-center">
+    <div className="flex min-h-[100dvh] items-center justify-center px-4 text-center">
       <div>
         <h1 className="font-display text-2xl font-semibold">Module not found</h1>
         <p className="mt-2 text-sm text-muted-foreground">

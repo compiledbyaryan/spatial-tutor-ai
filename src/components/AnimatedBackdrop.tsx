@@ -1,32 +1,21 @@
-/** Static warm wash (minimalist-ui: no ambient motion, no gradients). */
+/* CRT shell: scanlines plus mechanical noise, fixed and pointer-transparent. */
 export function AnimatedBackdrop() {
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="absolute inset-0 bg-[#F7F6F3]" />
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-[60] overflow-hidden">
+      <div className="absolute inset-0 bg-[#0a0a0a]" />
       <div
-        className="absolute rounded-none"
+        className="absolute inset-0"
         style={{
-          top: "-12rem",
-          left: "-8rem",
-          height: "34rem",
-          width: "34rem",
-          background: "#EAEAEA",
-          opacity: 0.5,
-          filter: "blur(90px)",
+          background:
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgb(0 0 0 / 0.18) 2px, rgb(0 0 0 / 0.18) 4px)",
         }}
       />
-      <div
-        className="absolute rounded-none"
-        style={{
-          top: "18%",
-          right: "-10rem",
-          height: "30rem",
-          width: "30rem",
-          background: "#EAEAEA",
-          opacity: 0.4,
-          filter: "blur(90px)",
-        }}
-      />
+      <svg className="absolute inset-0 h-full w-full opacity-[0.05]">
+        <filter id="spatia-noise">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#spatia-noise)" />
+      </svg>
     </div>
   );
 }

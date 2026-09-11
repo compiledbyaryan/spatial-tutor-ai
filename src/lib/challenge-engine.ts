@@ -61,7 +61,7 @@ export function evaluateChallenge(input: {
     correct,
     expectedHotspotIds,
     feedback: correct
-      ? "Correct — the structures and their order match the blood-flow pathway."
+      ? "Correct. The structures and their order match the blood-flow pathway."
       : challenge.expectedSequence
         ? "Not quite. The structures must be selected in physiological flow order."
         : "Not quite. Reconsider which visible structures satisfy every part of the prompt.",

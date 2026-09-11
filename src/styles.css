@@ -5,21 +5,25 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * SPATIA design system — minimalist-ui protocol (skill overrides prior themes here).
- * Warm monochrome canvas, ink CTA, Newsreader serif display, system sans UI,
- * JetBrains Mono for data only. Flat surfaces, hairline borders, no glow.
+ * SPATIA design system — industrial-brutalist-ui protocol (variant 4).
+ * Tactical Telemetry dark substrate. Deactivated CRT background, white
+ * phosphor foreground, hazard red as the single accent. Terminal green is
+ * reserved for the live viewpoint readout only.
+ * Shape rule: zero radius everywhere. Compartments are 1px or 2px solid
+ * borders, grid gap lines, ASCII brackets, crosshairs. No gradients, no
+ * blur, no shadows.
  */
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --font-display: "Newsreader", "Instrument Serif", Georgia, serif;
-  --font-sans: "Archivo", "SF Pro Display", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: "Geist Mono", "SF Mono", "JetBrains Mono", ui-monospace, monospace;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --font-display: "Archivo Black", "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", "Space Mono", ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -56,58 +60,54 @@
 }
 
 :root {
-  --radius: 0.375rem;
+  --radius: 0;
 
-  --background: #fbfbfa;
-  --foreground: #111111;
+  --background: #0a0a0a;
+  --foreground: #eaeaea;
 
-  --surface: #ffffff;
-  --surface-raised: #f9f9f8;
+  --surface: #111111;
+  --surface-raised: #161616;
 
-  --card: #ffffff;
-  --card-foreground: #111111;
-  --popover: #ffffff;
-  --popover-foreground: #111111;
+  --card: #111111;
+  --card-foreground: #eaeaea;
+  --popover: #111111;
+  --popover-foreground: #eaeaea;
 
-  --primary: #111111;
+  --primary: #e61919;
   --primary-foreground: #ffffff;
 
-  --secondary: #f7f6f3;
-  --secondary-foreground: #111111;
+  --secondary: #161616;
+  --secondary-foreground: #eaeaea;
 
-  --muted: #f7f6f3;
-  --muted-foreground: #787774;
+  --muted: #161616;
+  --muted-foreground: #9a9a9a;
 
-  /* Ink: sole saturated action color (reserved for primary CTA + send). */
-  --ink: #111111;
-  /* Spot pastels — semantic meaning only, always paired with dark text. */
-  --accent: #e1f3fe;
-  --accent-foreground: #1f6c9f;
+  --ink: #eaeaea;
+  --accent: #1a1a1a;
+  --accent-foreground: #eaeaea;
 
-  --destructive: #9f2f2d;
+  --destructive: #e61919;
   --destructive-foreground: #ffffff;
 
-  /* Caution (hint / retry feedback): pale yellow wash + dark text. */
-  --caution: #fbf3db;
-  --caution-foreground: #956400;
-  /* Good (success feedback): pale green wash + dark text. */
-  --good: #edf3ec;
-  --good-foreground: #346538;
+  --caution: #1a1a1a;
+  --caution-foreground: #e61919;
+  --good: #0e1a0e;
+  --good-foreground: #4af626;
 
-  --border: #eaeaea;
-  --input: #eaeaea;
-  --ring: #111111;
-  --grid: #eaeaea;
+  --border: #2a2a2a;
+  --input: #2a2a2a;
+  --ring: #e61919;
+  --grid: #2a2a2a;
 
-  --chart-1: #2f3437;
-  --chart-2: #346538;
-  --chart-3: #956400;
-  --chart-4: #1f6c9f;
-  --chart-5: #9f2f2d;
+  --chart-1: #eaeaea;
+  --chart-2: #9a9a9a;
+  --chart-3: #e61919;
+  --chart-4: #4af626;
+  --chart-5: #e61919;
 
-  /* Flat surfaces — depth comes from hairlines, never shadows. */
+  /* Mechanical rigidity: no shadows, no blur. Borders do the work. */
   --shadow-panel: 0 0 0 rgb(0 0 0 / 0);
-  --shadow-overlay: 0 2px 8px rgb(0 0 0 / 0.04);
+  --shadow-overlay: 0 0 0 rgb(0 0 0 / 0);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
@@ -119,13 +119,14 @@
 @layer base {
   * {
     border-color: var(--color-border);
+    border-radius: 0 !important;
   }
 
   body {
     background-color: var(--color-background);
-    color: #111111;
+    color: #eaeaea;
     font-family: var(--font-sans);
-    line-height: 1.6;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -134,30 +135,43 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    text-transform: uppercase;
   }
 }
 
+/* Compartment: 1px solid zone, square corners, flat fill. */
 @utility panel {
-  background-color: #ffffff;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
+  background-color: #111111;
+  border: 1px solid #2a2a2a;
+  border-radius: 0;
 }
 
 @utility label-mono {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #787774;
+  color: #9a9a9a;
 }
 
 @utility grid-backdrop {
   background-image:
-    linear-gradient(to right, rgb(0 0 0 / 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(0 0 0 / 0.045) 1px, transparent 1px);
+    linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
   background-size: 56px 56px;
+}
+
+/* CRT scanlines over the whole viewport: fixed, pointer-transparent. */
+@utility scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgb(0 0 0 / 0.18) 2px,
+    rgb(0 0 0 / 0.18) 4px
+  );
 }
 
 @keyframes pulse-ring {
@@ -178,40 +192,38 @@
   animation: pulse-ring 2.2s ease-out infinite;
 }
 
-/* Quiet scroll entry: fade + 12px rise over 600ms, expo-out. */
+/* Instant utility state change: brutalism does not ease. */
 @keyframes reveal-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @utility animate-reveal {
-  animation: reveal-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: reveal-up 120ms linear both;
 }
 
-/* Flat cards: no lift, no glow — hover is a hairline shift only. */
+/* Flat compartments: hover swaps border to red, never lifts. */
 @utility card-lift {
-  transition: border-color 200ms ease;
+  transition: border-color 100ms linear, background-color 100ms linear;
 }
 
-/* Shared interactive transition for buttons, chips, list rows (150–300ms). */
+/* Shared instant transition for buttons, chips, list rows. */
 @utility ui-interactive {
   transition:
-    color var(--dur-fast) ease,
-    background-color var(--dur-fast) ease,
-    border-color var(--dur-fast) ease,
-    opacity var(--dur-fast) ease,
-    transform var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-fast) ease;
+    color 100ms linear,
+    background-color 100ms linear,
+    border-color 100ms linear,
+    opacity 100ms linear;
 }
 
 /* Crossfade for swapped microcopy (narration, feedback, turn content). */
 @keyframes ui-fade-swap {
-  from { opacity: 0; transform: translateY(3px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @utility animate-fade-swap {
-  animation: ui-fade-swap var(--dur-fast) var(--ease-out) both;
+  animation: ui-fade-swap 100ms linear both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -224,30 +236,29 @@
   }
 }
 
-/* Visible keyboard focus everywhere: the studio is full of small controls. */
+/* Visible keyboard focus: 2px red outline, square. */
 :where(a, button, input, [tabindex]):focus-visible {
-  outline: 2px solid #111111;
+  outline: 2px solid #e61919;
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
-/* Browser surfaces carry the warm monochrome world too. */
 ::selection {
-  background: #111111;
+  background: #e61919;
   color: #ffffff;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #eaeaea transparent;
+  scrollbar-color: #2a2a2a transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #eaeaea;
-  border-radius: 8px;
+  background: #2a2a2a;
+  border-radius: 0;
 }
 *::-webkit-scrollbar-track {
   background: transparent;

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { IconBox, IconLogout } from "@/components/icons";
 import { supabase } from "@/integrations/supabase/client";
 
-const links = [{ to: "/explore/$sceneId", params: { sceneId: "cardiac" }, label: "3D Studio" }] as const;
+const links = [{ to: "/explore/$sceneId", params: { sceneId: "cardiac" }, label: "3D STUDIO" }] as const;
 
 export function SiteNav() {
   const [email, setEmail] = useState<string | null>(null);
@@ -17,7 +17,7 @@ export function SiteNav() {
         const { data } = await supabase.auth.getSession();
         if (alive) setEmail(data.session?.user.email ?? null);
       } catch {
-        // Supabase is optional (demo mode ships without keys) — stay signed out.
+        // Supabase is optional (demo mode ships without keys), so stay signed out.
         if (alive) setEmail(null);
       }
       try {
@@ -26,7 +26,7 @@ export function SiteNav() {
         });
         unsubscribe = () => sub.subscription.unsubscribe();
       } catch {
-        // No Supabase endpoint configured — no session subscription.
+        // No Supabase endpoint configured, so there is no session subscription.
       }
     })();
     return () => {
@@ -36,28 +36,40 @@ export function SiteNav() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[#EAEAEA] bg-[#FBFBFA]">
-      <nav aria-label="Primary" className="mx-auto flex max-w-5xl items-center gap-4 px-6 py-3">
-        <Link to="/" className="ui-interactive font-display text-lg font-semibold tracking-tight">
-          SPATIA
+    <header className="sticky top-0 z-40 border-b-2 border-[#2a2a2a] bg-[#0a0a0a]">
+      <nav
+        aria-label="Primary"
+        className="mx-auto grid max-w-7xl grid-cols-[1fr_auto] items-center gap-4 px-4 py-3 md:grid-cols-[auto_1fr_auto] md:px-6"
+      >
+        <Link
+          to="/"
+          className="ui-interactive font-display text-xl font-black tracking-tight text-[#eaeaea]"
+        >
+          SPATIA<span className="text-[#e61919]">®</span>
         </Link>
-        <div className="ml-2 hidden flex-1 items-center gap-1 md:flex">
+        <div className="hidden items-center gap-6 md:flex">
           {links.map((l) => (
             <Link
               key={l.label}
               to={l.to}
               params={l.params}
-              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 text-sm text-[#787774] hover:text-[#111111]"
+              className="ui-interactive inline-flex cursor-pointer items-center gap-2 font-mono text-xs tracking-[0.1em] text-[#9a9a9a] uppercase hover:text-[#eaeaea]"
             >
+              <span aria-hidden className="text-[#e61919]">
+                +
+              </span>
               <IconBox className="h-4 w-4" />
               {l.label}
             </Link>
           ))}
         </div>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="flex items-center gap-2">
+          <span className="mr-2 hidden font-mono text-[10px] tracking-[0.1em] text-[#9a9a9a] uppercase lg:block">
+            REV 2.6
+          </span>
           {email ? (
             <>
-              <span className="hidden max-w-[160px] truncate font-mono text-xs text-[#787774] sm:block">
+              <span className="hidden max-w-[160px] truncate font-mono text-xs text-[#9a9a9a] sm:block">
                 {email}
               </span>
               <button
@@ -68,19 +80,17 @@ export function SiteNav() {
                     setEmail(null);
                   }
                 }}
-                className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 border border-[#EAEAEA] bg-white px-3 py-1.5 text-xs text-[#2F3437] hover:text-[#111111]"
-                style={{ borderRadius: 6 }}
+                className="ui-interactive inline-flex cursor-pointer items-center gap-2 border border-[#2a2a2a] bg-[#111111] px-3 py-1.5 font-mono text-xs tracking-[0.1em] text-[#eaeaea] uppercase hover:border-[#e61919]"
               >
-                <IconLogout className="h-4 w-4" /> Sign out
+                <IconLogout className="h-4 w-4" /> SIGN OUT
               </button>
             </>
           ) : (
             <Link
               to="/auth"
-              className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 bg-[#111111] px-4 py-1.5 text-xs font-medium text-white hover:bg-[#333333]"
-              style={{ borderRadius: 6 }}
+              className="ui-interactive inline-flex cursor-pointer items-center gap-2 bg-[#e61919] px-4 py-1.5 font-mono text-xs font-bold tracking-[0.1em] text-white uppercase hover:bg-[#ff2a2a]"
             >
-              Sign in
+              SIGN IN
             </Link>
           )}
         </div>

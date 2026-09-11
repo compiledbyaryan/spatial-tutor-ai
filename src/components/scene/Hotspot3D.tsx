@@ -53,7 +53,7 @@ export function Hotspot3D({
         <mesh>
           <sphereGeometry args={[0.16, 24, 24]} />
           <meshBasicMaterial
-            color={active ? "#ffc561" : "#7fe6ef"}
+            color={active ? "#e61919" : "#eaeaea"}
             toneMapped={false}
             transparent={dimmed && !active}
             opacity={dimmed && !active ? 0.35 : 1}
@@ -62,7 +62,7 @@ export function Hotspot3D({
         <mesh>
           <sphereGeometry args={[0.3, 20, 20]} />
           <meshBasicMaterial
-            color={active ? "#ffc561" : "#7fe6ef"}
+            color={active ? "#e61919" : "#eaeaea"}
             transparent
             opacity={hovered || active ? 0.28 : 0.12}
             toneMapped={false}
@@ -73,19 +73,19 @@ export function Hotspot3D({
       {showLabel ? (
         <Html center distanceFactor={12} style={{ pointerEvents: "none" }}>
           <div
-            className={`whitespace-nowrap border px-2 py-1 text-[11px] transition-opacity ${
+            className={`whitespace-nowrap border px-2 py-1 font-mono text-[11px] tracking-[0.05em] uppercase ${
               active
-                ? "border-[#111111] bg-[#111111] font-semibold text-white opacity-100"
+                ? "border-[#e61919] bg-[#e61919] font-bold text-white opacity-100"
                 : hovered
-                  ? "border-[#111111] bg-white font-medium text-[#111111] opacity-100"
-                  : "border-[#EAEAEA] bg-white/95 text-[#2F3437] opacity-95"
+                  ? "border-[#eaeaea] bg-[#0a0a0a] font-bold text-[#eaeaea] opacity-100"
+                  : "border-[#2a2a2a] bg-[#111111]/95 text-[#eaeaea] opacity-95"
             }`}
-            style={{ transform: "translateY(-2.2rem)", borderRadius: 6 }}
+            style={{ transform: "translateY(-2.2rem)" }}
           >
-            <span className="mr-1.5 font-mono text-[10px] text-[#787774] tabular-nums">
+            <span className="mr-1.5 font-mono text-[10px] text-[#9a9a9a] tabular-nums">
               {String(index + 1).padStart(2, "0")}
             </span>
-            {hotspot.name}
+            {hotspot.name.toUpperCase()}
           </div>
         </Html>
       ) : null}
