@@ -78,7 +78,7 @@ function Landing() {
       <AnimatedBackdrop />
       <SiteNav />
       {/* Hero */}
-      <section className="grid-backdrop relative overflow-hidden border-b border-border/60">
+      <section className="relative overflow-hidden border-b border-border/60">
         <div className="mx-auto max-w-6xl px-6 pt-12 pb-20 md:pt-16 md:pb-28">
           <div
             className="animate-reveal inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 backdrop-blur"
