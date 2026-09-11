@@ -1,7 +1,7 @@
 /* CRT shell: scanlines plus mechanical noise, fixed and pointer-transparent. */
 export function AnimatedBackdrop() {
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[60] overflow-hidden">
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       <div className="absolute inset-0 bg-[#0a0a0a]" />
       <div
         className="absolute inset-0"
