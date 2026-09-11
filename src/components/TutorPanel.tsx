@@ -107,12 +107,42 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions, onStageC
       ].slice(0, 3)
     : [`Orient me in this model`, `What should I look at first?`, `Give me a 30-second overview`];
 
+function ViewpointLine({
+  hotspotName,
+  viewpoint,
+}: {
+  hotspotName: string | null;
+  viewpoint: Viewpoint | null;
+}) {
+  if (!viewpoint) {
+    return (
+      <p className="text-xs leading-relaxed text-muted-foreground">
+        <span className="text-foreground">{hotspotName ?? "Free navigation"}</span>
+      </p>
+    );
+  }
+  const deg = (r: number) => Math.round((r * 180) / Math.PI);
+  const az = ((deg(viewpoint.azimuth) % 360) + 360) % 360;
+  const side = az < 45 || az >= 315 ? "front" : az < 135 ? "right side" : az < 225 ? "back" : "left side";
+  const height = deg(viewpoint.polar) < 55 ? "above" : deg(viewpoint.polar) > 110 ? "below" : "level";
+  const range = viewpoint.distance < 4 ? "Close up" : viewpoint.distance < 9 ? "Mid-range" : "Wide";
+  return (
+    <p
+      key={`${hotspotName ?? "free"}-${side}-${height}-${range}`}
+      className="animate-fade-swap text-xs leading-relaxed text-muted-foreground"
+    >
+      <span className="text-foreground">{hotspotName ?? "Free navigation"}</span>
+      {" · "}
+      {range} view from the {side}, {height}
+    </p>
+  );
+}
+
   return (
     <div className="panel flex h-full min-h-0 flex-col overflow-hidden">
       <div className="flex items-center justify-between gap-3 border-b border-border/70 px-4 py-3">
         <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2" aria-hidden>
-            <span className="absolute inline-flex h-full w-full rounded-full bg-primary animate-pulse-ring" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
           </span>
           <span className="font-display text-sm font-semibold">Spatial AI Tutor</span>
@@ -121,18 +151,8 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions, onStageC
       </div>
 
       <div className="flex items-start gap-2 border-b border-border/70 bg-secondary/40 px-4 py-2.5">
-        <Crosshair className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" aria-hidden />
-        <p key={hotspot ? hotspot.id : "free"} className="animate-fade-swap text-xs leading-relaxed text-muted-foreground">
-          <span className="text-foreground">{hotspot ? hotspot.name : "Free navigation"}</span>
-          {viewpoint ? (
-            <>
-              {" · "}
-              <span className="tabular-nums">{viewpoint.distance.toFixed(1)}u</span> ·{" "}
-              {`az ${Math.round(((((viewpoint.azimuth * 180) / Math.PI) % 360) + 360) % 360)}°`} ·{" "}
-              {`el ${Math.round(90 - (viewpoint.polar * 180) / Math.PI)}°`}
-            </>
-          ) : null}
-        </p>
+        <Crosshair className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+        <ViewpointLine hotspotName={hotspot ? hotspot.name : null} viewpoint={viewpoint} />
       </div>
 
       <div ref={scroller} className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
@@ -258,7 +278,7 @@ export function TutorPanel({ scene, hotspot, viewpoint, onSceneActions, onStageC
           <button
             type="submit"
             disabled={mutation.isPending || !draft.trim()}
-            className="ui-interactive inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-40"
+            className="ui-interactive inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-accent text-accent-foreground hover:opacity-90 disabled:opacity-40"
             aria-label="Send question"
           >
             <Send className="h-4 w-4" aria-hidden />

@@ -359,9 +359,9 @@ export function StudioView({ scene }: { scene: SceneModule }) {
             {hotspot && mode !== "challenge" ? (
             <div
               key={hotspot.id}
-              className="animate-fade-swap pointer-events-none absolute bottom-4 left-4 right-4 rounded-xl border border-accent/40 bg-background/80 p-3 backdrop-blur-md md:max-w-md"
+              className="animate-fade-swap pointer-events-none absolute bottom-4 left-4 right-4 rounded-xl border border-border/70 bg-surface/95 p-3 shadow-(--shadow-overlay) backdrop-blur-md md:max-w-md"
             >
-              <p className="label-mono text-accent">{hotspot.category}</p>
+              <p className="label-mono text-primary">{hotspot.category}</p>
               <p className="mt-1 font-display text-sm font-semibold">{hotspot.name}</p>
               <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                 {hotspot.summary}
@@ -511,7 +511,7 @@ function IndexPanel({
                   className="ui-interactive w-full cursor-pointer rounded-lg px-2 py-1.5 text-left text-xs text-muted-foreground hover:bg-secondary/60 hover:text-primary"
                 >
                   <span className="line-clamp-2">{c.prompt}</span>
-                  <span className="label-mono mt-0.5 block">difficulty {c.difficulty}</span>
+                  <span className="label-mono mt-0.5 block">Level {c.difficulty}</span>
                 </button>
               </li>
             ))}

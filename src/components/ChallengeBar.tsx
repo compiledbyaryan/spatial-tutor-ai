@@ -96,7 +96,7 @@ export function ChallengeBar({
         : "Select in the 3D model";
   const border =
     flash === "good"
-      ? "border-emerald-400/70"
+      ? "border-accent/70"
       : flash === "bad"
         ? "border-destructive/70"
         : "border-border/70";
@@ -119,7 +119,7 @@ export function ChallengeBar({
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="label-mono text-primary">
-            {CHALLENGE_TYPE_LABEL[challenge.type]} · Difficulty {challenge.difficulty}
+            {CHALLENGE_TYPE_LABEL[challenge.type]} · Level {challenge.difficulty}
           </p>
           <p className="mt-1 font-display text-sm font-semibold">{title}</p>
         </div>
@@ -155,7 +155,7 @@ export function ChallengeBar({
                   →
                 </span>
               ) : null}
-              <span className="rounded-full border border-emerald-400/50 bg-emerald-400/10 px-2 py-0.5 font-medium text-emerald-300">
+              <span className="rounded-full border border-accent/50 bg-accent/10 px-2 py-0.5 font-medium text-foreground">
                 {pickedNames([id])}
               </span>
             </li>
@@ -177,7 +177,7 @@ export function ChallengeBar({
           key={feedback}
           className={
             "animate-fade-swap mt-2 flex items-start gap-1.5 text-sm " +
-            (flash === "bad" ? "text-amber-300" : "text-emerald-400")
+            (flash === "bad" ? "text-foreground" : "text-foreground")
           }
           role="status"
         >

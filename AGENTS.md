@@ -2,6 +2,17 @@
 
 SPATIA is a TanStack Start, React 19, TypeScript, Tailwind, React Three Fiber, Zod, and AI SDK application. Preserve the polished 3D experience and the integrated Explore → Ask → Challenge → Master loop.
 
+## Active theme override (2026-09-11, user-directed)
+
+The ui-ux-pro-max skill's SPATIA design system takes precedence over the
+previous dark instrument-panel world: light indigo background (`#EEF2FF`),
+learning-indigo primary (`#4F46E5` / `#818CF8`), progress-green CTA
+(`#22C55E`, `--accent #15803d` for light-mode contrast), Baloo 2 display /
+Comic Neue body, micro-interactions at 50–100ms, plain kid-friendly copy
+("Level" not "Difficulty", no telemetry jargon). This was an explicit user
+instruction to follow the skill over AGENTS.md. Reverting to the dark theme
+requires a new explicit user decision — do not "restore" it unasked.
+
 ## Commands
 
 - Install: `npm install`

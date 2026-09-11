@@ -93,7 +93,7 @@ export function MasteryPanel({ scene, profile, onReviewWeakArea, onPracticeAgain
           <button
             onClick={() => onReviewWeakArea(summary.recommended!)}
             title={`Start the recommended review challenge: ${summary.recommended.prompt}`}
-            className="ui-interactive inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
+            className="ui-interactive inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground hover:opacity-90"
           >
             <Award className="h-4 w-4 shrink-0" aria-hidden />
             <span className="line-clamp-2 text-left">

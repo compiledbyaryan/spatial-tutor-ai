@@ -75,10 +75,10 @@ export function Hotspot3D({
           <div
             className={`whitespace-nowrap rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-widest uppercase transition-opacity ${
               active
-                ? "border-accent/60 bg-accent/15 text-accent opacity-100"
+                ? "border-primary bg-primary text-primary-foreground opacity-100"
                 : hovered
-                  ? "border-primary/60 bg-background/80 text-primary opacity-100"
-                  : "border-border/60 bg-background/60 text-muted-foreground opacity-70"
+                  ? "border-primary/60 bg-white/95 text-primary opacity-100"
+                  : "border-slate-300 bg-white/90 text-slate-600 opacity-90"
             }`}
             style={{ transform: "translateY(-2.2rem)" }}
           >

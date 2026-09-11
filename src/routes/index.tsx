@@ -111,7 +111,7 @@ function Landing() {
             <Link
               to="/explore/$sceneId"
               params={{ sceneId: "cardiac" }}
-              className="ui-interactive inline-flex cursor-pointer items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+              className="ui-interactive inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90"
             >
               <Boxes className="h-4 w-4" aria-hidden /> Open the Human Heart
               <ArrowRight className="h-4 w-4" aria-hidden />
@@ -161,7 +161,7 @@ function Landing() {
             <Link
               to="/explore/$sceneId"
               params={{ sceneId: "cardiac" }}
-              className="ui-interactive inline-flex cursor-pointer items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+              className="ui-interactive inline-flex cursor-pointer items-center gap-2 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90"
             >
               <HeartPulse className="h-4 w-4" aria-hidden /> Enter the heart studio
             </Link>
