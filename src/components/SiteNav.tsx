@@ -13,15 +13,27 @@ export function SiteNav() {
 
   useEffect(() => {
     let alive = true;
-    supabase.auth.getSession().then(({ data }) => {
-      if (alive) setEmail(data.session?.user.email ?? null);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      setEmail(session?.user.email ?? null);
-    });
+    let unsubscribe: (() => void) | undefined;
+    (async () => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (alive) setEmail(data.session?.user.email ?? null);
+      } catch {
+        // Supabase is optional (demo mode ships without keys) — stay signed out.
+        if (alive) setEmail(null);
+      }
+      try {
+        const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+          if (alive) setEmail(session?.user.email ?? null);
+        });
+        unsubscribe = () => sub.subscription.unsubscribe();
+      } catch {
+        // No Supabase endpoint configured — no session subscription.
+      }
+    })();
     return () => {
       alive = false;
-      sub.subscription.unsubscribe();
+      unsubscribe?.();
     };
   }, []);
 
@@ -53,7 +65,11 @@ export function SiteNav() {
               <span className="label-mono hidden max-w-[160px] truncate sm:block">{email}</span>
               <button
                 onClick={async () => {
-                  await supabase.auth.signOut();
+                  try {
+                    await supabase.auth.signOut();
+                  } catch {
+                    setEmail(null);
+                  }
                 }}
                 className="ui-interactive inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
               >
